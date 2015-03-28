@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.samsung.com/">
+  <cpname/>
+  <cplogo/>
+  <cpauthjs/>
+  <ThumbIcon>icon/mural_logo.png</ThumbIcon>
+  <BigThumbIcon>icon/mural_logo.png</BigThumbIcon>
+  <ListIcon>icon/mural_logo.png</ListIcon>
+  <BigListIcon>icon/mural_logo.png</BigListIcon>
+  <category>Lifestyle</category>
+  <autoUpdate>n</autoUpdate>
+  <ver>0.1</ver>
+  <mgrver/>
+  <fullwidget>y</fullwidget>
+  <type>user</type>
+  <srcctl>y</srcctl>
+  <ticker>n</ticker>
+  <childlock>n</childlock>
+  <videomute>n</videomute>
+  <dcont>y</dcont>
+  <widgetname>Mural</widgetname>
+  <description/>
+  <width>1280</width>
+  <height>720</height>
+  <author>
+    <name/>
+    <email/>
+    <link/>
+    <organization/>
+  </author>
+</widget>
