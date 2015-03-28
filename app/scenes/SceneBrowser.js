@@ -10,6 +10,7 @@ SceneSceneBrowser.MODE_ALL = 1; // [JR: used to be 0]
 SceneSceneBrowser.MODE_GENRES = 1;
 SceneSceneBrowser.MODE_GENRES_GENRES = 2;
 SceneSceneBrowser.MODE_GO = 3;
+SceneSceneBrowser.MODE_DISPLAY_ART = 99;
 
 SceneSceneBrowser.mode = SceneSceneBrowser.MODE_NONE;
 SceneSceneBrowser.genreSelected = null;
@@ -135,6 +136,13 @@ SceneSceneBrowser.loadDataError = function() {
   }
 };
 
+SceneSceneBrowser.displayArt = function(artURL) {
+  $("#art_table").empty();
+  $("#art_table").append('<tr><td width="100%"><img id="display-art" class="art_thumbnail" src="' + artURL + '"/></td></tr>');
+  SceneSceneBrowser.showTable();
+  alert("ALLEN: .displayArt is finished. Attempted to render " + artURL);
+};
+
 SceneSceneBrowser.loadDataSuccess = function(responseText) {
   var response = $.parseJSON(responseText);
 
@@ -207,14 +215,14 @@ SceneSceneBrowser.loadDataRequest = function() {
     SceneSceneBrowser.showDialog(dialog_title);
 
     var xmlHttp = new XMLHttpRequest(),
-    	theUrl = 'art.json';
+    	  theUrl = 'art.json';
 
     xmlHttp.ontimeout = function() {};
     xmlHttp.onreadystatechange = function() {
       if (xmlHttp.readyState === 4) {
         if (xmlHttp.status === 200) {
           try {
-        	console.log(xmlHttp.responseText);
+        	  console.log(xmlHttp.responseText);
             SceneSceneBrowser.loadDataSuccess(xmlHttp.responseText);
           } catch (err) {
             SceneSceneBrowser.showDialog("loadDataSuccess() exception: " + err.name + ' ' + err.message);
@@ -239,11 +247,15 @@ SceneSceneBrowser.loadData = function() {
     return;
   }
 
-  SceneSceneBrowser.loadingData = true;
-  SceneSceneBrowser.loadingDataTry = 0;
-  SceneSceneBrowser.loadingDataTimeout = 500;
+  if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
+    SceneSceneBrowser.displayArt(SceneSceneBrowser.currentPieceURL);
+  } else {
+    SceneSceneBrowser.loadingData = true;
+    SceneSceneBrowser.loadingDataTry = 0;
+    SceneSceneBrowser.loadingDataTimeout = 500;
 
-  SceneSceneBrowser.loadDataRequest();
+    SceneSceneBrowser.loadDataRequest();
+  }
 };
 
 SceneSceneBrowser.showDialog = function(title) {
@@ -303,10 +315,14 @@ SceneSceneBrowser.clean = function() {
 };
 
 SceneSceneBrowser.refresh = function() {
-  if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_GO) {
-    SceneSceneBrowser.clean();
-    SceneSceneBrowser.loadData();
-  }
+  alert("ALLEN: .refresh was called; mode is currently " + SceneSceneBrowser.mode);
+  // if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_DISPLAY_ART) {
+  SceneSceneBrowser.clean();
+  SceneSceneBrowser.loadData();
+  // } else {
+  //   SceneSceneBrowser.clean();
+  //   // TODO
+  // }
 };
 
 
@@ -413,6 +429,7 @@ SceneSceneBrowser.prototype.handleBlur = function() {
 
 SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
   alert("SceneSceneBrowser.handleKeyDown(" + keyCode + ")");
+  alert("ALLEN: SeneSeneBrowser.mode is " + SceneSceneBrowser.mode);
 
   if (keyCode == sf.key.RETURN) {
     if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRES_GENRES && !SceneSceneBrowser.loadingData) {
@@ -483,7 +500,10 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
         }
       } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRES) {
         SceneSceneBrowser.genreSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
-        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_GENRES_GENRES;
+        // SceneSceneBrowser.mode = SceneSceneBrowser.MODE_GENRES_GENRES;
+        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_DISPLAY_ART;
+        SceneSceneBrowser.currentPieceURL = $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src');
+        alert("ALLEN: Art URL is " + $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src'));
         SceneSceneBrowser.refresh();
       } else {
         SceneSceneBrowser.selectedChannel = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
