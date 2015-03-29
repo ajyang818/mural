@@ -137,17 +137,54 @@ SceneSceneBrowser.loadDataError = function() {
 };
 
 SceneSceneBrowser.displayArt = function(artURL) {
-  // Handles rendering of a chosen art (from source artURL) in the "#single-piece" div,
-  // which is usually hidden but ought to display above the menu.
+  // Handles rendering of a chosen piece (from source artURL) in the "#single-piece" div,
+  // which is usually hidden but will display above the menu.
+
+  // Clear whatever piece may have been previously shown
   $("#single-piece").empty();
-  $("#single-piece").append('<tr><td width="100%"><img id="display-art" class="art_thumbnail" src="' + artURL + '"/></td></tr>');
-  $("#single-piece").show();
-  // SceneSceneBrowser.showTable();
-  alert("ALLEN: .displayArt is finished. Attempted to render " + artURL);
+  $("#single-piece").css("height", null);
+  $("#single-piece").css("width", null);
+
+  // Add a placeholder for the piece
+  $("#single-piece").append('<img id="display-art" />');
+
+  // Load the piece, but scale the image to full-screen after it's loaded
+  var imgLoad = $("#display-art");
+  imgLoad.attr("src", artURL);
+  imgLoad.unbind("load");
+  imgLoad.bind("load", function () {
+    // alert("ALLEN: height is " + this.height + " and width is " + this.width);
+    var artHeight = this.height,
+        artWidth = this.width,
+        wrapperHeight = $("#single-piece-wrapper").height(),
+        wrapperWidth = $("#single-piece-wrapper").width(),
+        artRatio = artHeight / artWidth,
+        wrapperRatio = wrapperHeight / wrapperWidth;  // Let's say 1" to 2" => 0.5
+    // alert("ALLEN: height is " + artHeight + " and width is " + artWidth);
+    // alert("ALLEN: wrapper height is " + $("#single-piece-wrapper").height() + " and piece div height is " + $("#single-piece").height());
+
+    if (artRatio > wrapperRatio) {
+      $("#single-piece").height("100%");
+      $("#display-art").height("100%");
+      alert("ALLEN: height set to 100%");
+    } else {
+      $("#single-piece").width("100%");
+      $("#display-art").width("100%");
+      alert("ALLEN: width set to 100%");
+    }
+    $("#single-piece-wrapper").show();
+  });
+
+//   setTimeout(function() {
+//       // Calculation to determine scaling
+//     }, 2000);
+
+//   // SceneSceneBrowser.showTable();
+//   alert("ALLEN: .displayArt is finished. Attempted to render " + artURL);
 };
 
 SceneSceneBrowser.hideArt = function() {
-  $("#single-piece").hide();
+  $("#single-piece-wrapper").hide();
   alert("ALLEN: .hideArt activated");
 };
 
