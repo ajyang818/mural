@@ -137,10 +137,18 @@ SceneSceneBrowser.loadDataError = function() {
 };
 
 SceneSceneBrowser.displayArt = function(artURL) {
-  $("#art_table").empty();
-  $("#art_table").append('<tr><td width="100%"><img id="display-art" class="art_thumbnail" src="' + artURL + '"/></td></tr>');
-  SceneSceneBrowser.showTable();
+  // Handles rendering of a chosen art (from source artURL) in the "#single-piece" div,
+  // which is usually hidden but ought to display above the menu.
+  $("#single-piece").empty();
+  $("#single-piece").append('<tr><td width="100%"><img id="display-art" class="art_thumbnail" src="' + artURL + '"/></td></tr>');
+  $("#single-piece").show();
+  // SceneSceneBrowser.showTable();
   alert("ALLEN: .displayArt is finished. Attempted to render " + artURL);
+};
+
+SceneSceneBrowser.hideArt = function() {
+  $("#single-piece").hide();
+  alert("ALLEN: .hideArt activated");
 };
 
 SceneSceneBrowser.loadDataSuccess = function(responseText) {
@@ -437,6 +445,15 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GENRES);
       return;
     }
+  }
+
+  // When the app is in "display single piece" mode and the user presses any button,
+  // he should return to the main screen
+  if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
+    SceneSceneBrowser.hideArt();
+    SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GENRES);
+    SceneSceneBrowser.refresh();
+    return;
   }
 
   if (SceneSceneBrowser.loadingData) {
