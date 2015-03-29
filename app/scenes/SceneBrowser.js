@@ -153,16 +153,15 @@ SceneSceneBrowser.displayArt = function(artURL) {
   imgLoad.attr("src", artURL);
   imgLoad.unbind("load");
   imgLoad.bind("load", function () {
-    // alert("ALLEN: height is " + this.height + " and width is " + this.width);
     var artHeight = this.height,
         artWidth = this.width,
         wrapperHeight = $("#single-piece-wrapper").height(),
         wrapperWidth = $("#single-piece-wrapper").width(),
         artRatio = artHeight / artWidth,
-        wrapperRatio = wrapperHeight / wrapperWidth;  // Let's say 1" to 2" => 0.5
-    // alert("ALLEN: height is " + artHeight + " and width is " + artWidth);
-    // alert("ALLEN: wrapper height is " + $("#single-piece-wrapper").height() + " and piece div height is " + $("#single-piece").height());
+        wrapperRatio = wrapperHeight / wrapperWidth;
 
+    // To determine whether to make the height or width 100% of the container,
+    // we need to compare the ratio of height to width
     if (artRatio > wrapperRatio) {
       $("#single-piece").height("100%");
       $("#display-art").height("100%");
@@ -174,13 +173,6 @@ SceneSceneBrowser.displayArt = function(artURL) {
     }
     $("#single-piece-wrapper").show();
   });
-
-//   setTimeout(function() {
-//       // Calculation to determine scaling
-//     }, 2000);
-
-//   // SceneSceneBrowser.showTable();
-//   alert("ALLEN: .displayArt is finished. Attempted to render " + artURL);
 };
 
 SceneSceneBrowser.hideArt = function() {
