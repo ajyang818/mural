@@ -30,7 +30,7 @@ SceneSceneChannel.artInfoTimer = null;
 function extractStreamDeclarations(input) {
   var result = [];
 
-  var myRegexp = /#EXT-X-MEDIA:(.)*\n#EXT-X-GENRE-INF:(.)*\n(.)*/g;
+  var myRegexp = /#EXT-X-MEDIA:(.)*\n#EXT-X-STYLE-INF:(.)*\n(.)*/g;
   var match;
   while (match = myRegexp.exec(input)) {
     result.push(match[0]);
@@ -291,7 +291,7 @@ SceneSceneChannel.onAuthenticationFailed = function() {
 };
 
 SceneSceneChannel.onStreamNotFound = function() {
-  SceneSceneChannel.showDialog(STR_ERROR_GENRE_NOT_FOUND);
+  SceneSceneChannel.showDialog(STR_ERROR_STYLE_NOT_FOUND);
 };
 
 SceneSceneChannel.onNetworkDisconnected = function() {

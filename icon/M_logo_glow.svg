@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="478.35001"
+   height="542.96252"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="M_logo.svg"
+   inkscape:export-filename="/home/john/Documents/Coursework/RC Spring/FIELD3/logo/M_logo.png"
+   inkscape:export-xdpi="67.827888"
+   inkscape:export-ydpi="67.827888">
+  <defs
+     id="defs4">
+    <filter
+       id="filter3834"
+       inkscape:label="Glow"
+       inkscape:menu="Shadows and Glows"
+       inkscape:menu-tooltip="Glow of object's own color at the edges"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur3836"
+         stdDeviation="5"
+         result="result91" />
+      <feComposite
+         id="feComposite3838"
+         in2="result91"
+         in="SourceGraphic"
+         operator="over" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.51422294"
+     inkscape:cx="334.22312"
+     inkscape:cy="371.25282"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1598"
+     inkscape:window-height="854"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:snap-global="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3780"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       originx="-578.61171px"
+       originy="-232.27153px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-132.2625,-157.12813)">
+    <g
+       transform="matrix(1.0116413,0,0,0.98849266,7.75098,5.75098)"
+       style="font-size:342.57745361px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00ffff;fill-opacity:1;stroke:none;font-family:hanken round;-inkscape-font-specification:hanken round"
+       id="text2985" />
+    <g
+       id="g3829"
+       style="filter:url(#filter3834)">
+      <rect
+         rx="0"
+         ry="9.0713377"
+         y="210.8703"
+         x="180.62135"
+         height="435.47302"
+         width="381.61441"
+         id="rect3052"
+         style="fill:none;stroke:#75c8ac;stroke-width:17;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:29.29999924;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#75c8ac;fill-opacity:1;stroke:none;stroke-width:14;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 233.61423,362.068 102.26935,169.28851 c 2.08666,3.01551 5.12154,4.53941 9.06343,4.53941 3.94158,0 6.9451,-1.5239 9.03207,-4.53941 l 100.85809,-166.49703 0,162.84464 c -2.7e-4,2.26163 1.04907,4.22587 3.13614,5.9221 2.08652,1.50776 4.52451,2.2697 7.30719,2.2697 2.78212,0 5.107,-0.76194 6.96222,-2.2697 2.08652,-1.69623 3.10448,-3.66047 3.10477,-5.9221 l 0,-198.19461 c -2.9e-4,-2.26142 -1.01825,-4.12716 -3.10477,-5.63513 -1.85522,-1.696 -4.1801,-2.55645 -6.96222,-2.55667 -4.40574,2.2e-4 -7.55374,1.49801 -9.4084,4.51331 L 344.94701,509.02473 233.64559,325.83102"
+         id="path3809"
+         inkscape:connector-curvature="0" />
+      <path
+         sodipodi:nodetypes="cccccc"
+         inkscape:connector-curvature="0"
+         id="rect3818"
+         d="m 227.08347,294.31838 0,-30.4286 288.69017,0 0,329.43406 -288.69017,0 0.12197,-264.73427 116.43897,193.30592 121.69615,-193.20122 -1.3751,193.88877"
+         style="fill:none;stroke:#75c8ac;stroke-width:17;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:29.29999924;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+  </g>
+</svg>

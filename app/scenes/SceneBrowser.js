@@ -7,12 +7,12 @@ SceneSceneBrowser.ColumnsCount = 4;
 
 SceneSceneBrowser.MODE_NONE = -1;
 SceneSceneBrowser.MODE_ALL = 1; // [JR: used to be 0]
-SceneSceneBrowser.MODE_GENRES = 1;
-SceneSceneBrowser.MODE_GENRES_GENRES = 2;
+SceneSceneBrowser.MODE_STYLES = 1;
+SceneSceneBrowser.MODE_STYLES_STYLES = 2;
 SceneSceneBrowser.MODE_GO = 3;
 
 SceneSceneBrowser.mode = SceneSceneBrowser.MODE_NONE;
-SceneSceneBrowser.genreSelected = null;
+SceneSceneBrowser.styleSelected = null;
 SceneSceneBrowser.itemsCount = 0;
 SceneSceneBrowser.cursorX = 0;
 SceneSceneBrowser.cursorY = 0;
@@ -138,10 +138,10 @@ SceneSceneBrowser.loadDataError = function() {
 SceneSceneBrowser.loadDataSuccess = function(responseText) {
   var response = $.parseJSON(responseText);
 
-//  console.log(SceneSceneBrowser.mode + ' ==? ' + SceneSceneBrowser.MODE_GENRES);
+//  console.log(SceneSceneBrowser.mode + ' ==? ' + SceneSceneBrowser.MODE_STYLES);
 
   var response_items;
-  if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRES) {
+  if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES) {
     response_items = response.top.length;
   } else {
     response_items = response.arts.length;
@@ -171,11 +171,11 @@ SceneSceneBrowser.loadDataSuccess = function(responseText) {
     for (t = 0; t < SceneSceneBrowser.ColumnsCount && cursor < response_items; t++, cursor++) {
       var cell;
 
-      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRES) {
-        var genre = response.top[cursor];
-        console.log("SceneSceneBrowser.createCell(" + row_id + "," + t + "," + genre.name + "," + genre.url + "," + genre.name + "," + genre.artist + "," + "''" + ",true);");
-        cell = SceneSceneBrowser.createCell(row_id, t, genre.name, genre.url, genre.name, genre.artist, '', true);
-//        cell = SceneSceneBrowser.createCell(row_id, t, genre.genre.name, genre.genre.box.large, genre.genre.name, addCommas(genre.viewers) + ' Viewers', '', true);
+      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
+        var style = response.top[cursor];
+        console.log("SceneSceneBrowser.createCell(" + row_id + "," + t + "," + style.name + "," + style.url + "," + style.name + "," + style.artist + "," + "''" + ",true);");
+        cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
+//        cell = SceneSceneBrowser.createCell(row_id, t, style.style.name, style.style.box.large, style.style.name, addCommas(style.viewers) + ' Viewers', '', true);
       } else {
         var art = response.arts[cursor];
         cell = SceneSceneBrowser.createCell(row_id, t, art.channel.name, art.preview.medium, art.channel.status, art.channel.display_name, addCommas(art.viewers) + ' Viewers', false);
@@ -272,18 +272,18 @@ SceneSceneBrowser.switchMode = function(mode) {
     SceneSceneBrowser.mode = mode;
 
     $("#tip_icon_channels").removeClass('tip_icon_active');
-    $("#tip_icon_genres").removeClass('tip_icon_active');
+    $("#tip_icon_styles").removeClass('tip_icon_active');
     $("#tip_icon_open").removeClass('tip_icon_active');
     $("#tip_icon_refresh").removeClass('tip_icon_active');
 
     if (mode == SceneSceneBrowser.MODE_ALL) {
       $("#tip_icon_channels").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
-    } else if (mode == SceneSceneBrowser.MODE_GENRES) {
-      $("#tip_icon_genres").addClass('tip_icon_active');
+    } else if (mode == SceneSceneBrowser.MODE_STYLES) {
+      $("#tip_icon_styles").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
-    } else if (mode == SceneSceneBrowser.MODE_GENRES_GENRES) {
-      $("#tip_icon_genres").addClass('tip_icon_active');
+    } else if (mode == SceneSceneBrowser.MODE_STYLES_STYLES) {
+      $("#tip_icon_styles").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
     } else if (mode == SceneSceneBrowser.MODE_GO) {
       $("#tip_icon_open").addClass('tip_icon_active');
@@ -368,7 +368,7 @@ function SceneSceneBrowser() {
 SceneSceneBrowser.initLanguage = function() {
   //set correct labels
   $('.label_channels').html(STR_CHANNELS);
-  $('.label_genres').html(STR_GENRES);
+  $('.label_styles').html(STR_STYLES);
   $('.label_open').html(STR_OPEN);
   $('.label_refresh').html(STR_REFRESH);
   $('.label_placeholder_open').attr("placeholder", STR_PLACEHOLDER_OPEN);
@@ -415,9 +415,9 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
   alert("SceneSceneBrowser.handleKeyDown(" + keyCode + ")");
 
   if (keyCode == sf.key.RETURN) {
-    if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRES_GENRES && !SceneSceneBrowser.loadingData) {
+    if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES_STYLES && !SceneSceneBrowser.loadingData) {
       sf.key.preventDefault();
-      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GENRES);
+      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
       return;
     }
   }
@@ -481,9 +481,9 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
           SceneSceneBrowser.selectedChannel = $('#artname_input').val();
           SceneSceneBrowser.openStream();
         }
-      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRES) {
-        SceneSceneBrowser.genreSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
-        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_GENRES_GENRES;
+      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
+        SceneSceneBrowser.styleSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
+        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_STYLES_STYLES;
         SceneSceneBrowser.refresh();
       } else {
         SceneSceneBrowser.selectedChannel = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
@@ -503,7 +503,7 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ALL);
       break;
     case sf.key.GREEN:
-      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GENRES);
+      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
       break;
     case sf.key.YELLOW:
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GO);
