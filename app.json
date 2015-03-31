@@ -1,7 +1,6 @@
 {
  "files": [],
  "scenes": [
-  "SceneChannel",
   "SceneBrowser"
  ],
  "theme": "base",
