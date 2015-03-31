@@ -10,6 +10,7 @@ SceneSceneBrowser.MODE_ALL = 1; // [JR: used to be 0]
 SceneSceneBrowser.MODE_STYLES = 1;
 SceneSceneBrowser.MODE_STYLES_STYLES = 2;
 SceneSceneBrowser.MODE_GO = 3;
+SceneSceneBrowser.MODE_DISPLAY_ART = 99;
 
 SceneSceneBrowser.mode = SceneSceneBrowser.MODE_NONE;
 SceneSceneBrowser.styleSelected = null;
@@ -135,6 +136,50 @@ SceneSceneBrowser.loadDataError = function() {
   }
 };
 
+SceneSceneBrowser.displayArt = function(artURL) {
+  // Handles rendering of a chosen piece (from source artURL) in the "#single-piece" div,
+  // which is usually hidden but will display above the menu.
+
+  // Clear whatever piece may have been previously shown
+  $("#single-piece").empty();
+  $("#single-piece").css("height", null);
+  $("#single-piece").css("width", null);
+
+  // Add a placeholder for the piece
+  $("#single-piece").append('<img id="display-art" />');
+
+  // Load the piece, but scale the image to full-screen after it's loaded
+  var imgLoad = $("#display-art");
+  imgLoad.attr("src", artURL);
+  imgLoad.unbind("load");
+  imgLoad.bind("load", function () {
+    var artHeight = this.height,
+        artWidth = this.width,
+        wrapperHeight = $("#single-piece-wrapper").height(),
+        wrapperWidth = $("#single-piece-wrapper").width(),
+        artRatio = artHeight / artWidth,
+        wrapperRatio = wrapperHeight / wrapperWidth;
+
+    // To determine whether to make the height or width 100% of the container,
+    // we need to compare the ratio of height to width
+    if (artRatio > wrapperRatio) {
+      $("#single-piece").height("100%");
+      $("#display-art").height("100%");
+      alert("ALLEN: height set to 100%");
+    } else {
+      $("#single-piece").width("100%");
+      $("#display-art").width("100%");
+      alert("ALLEN: width set to 100%");
+    }
+    $("#single-piece-wrapper").show();
+  });
+};
+
+SceneSceneBrowser.hideArt = function() {
+  $("#single-piece-wrapper").hide();
+  alert("ALLEN: .hideArt activated");
+};
+
 SceneSceneBrowser.loadDataSuccess = function(responseText) {
   var response = $.parseJSON(responseText);
 
@@ -207,14 +252,14 @@ SceneSceneBrowser.loadDataRequest = function() {
     SceneSceneBrowser.showDialog(dialog_title);
 
     var xmlHttp = new XMLHttpRequest(),
-    	theUrl = 'art.json';
+    	  theUrl = 'art.json';
 
     xmlHttp.ontimeout = function() {};
     xmlHttp.onreadystatechange = function() {
       if (xmlHttp.readyState === 4) {
         if (xmlHttp.status === 200) {
           try {
-        	console.log(xmlHttp.responseText);
+        	  console.log(xmlHttp.responseText);
             SceneSceneBrowser.loadDataSuccess(xmlHttp.responseText);
           } catch (err) {
             SceneSceneBrowser.showDialog("loadDataSuccess() exception: " + err.name + ' ' + err.message);
@@ -239,11 +284,15 @@ SceneSceneBrowser.loadData = function() {
     return;
   }
 
-  SceneSceneBrowser.loadingData = true;
-  SceneSceneBrowser.loadingDataTry = 0;
-  SceneSceneBrowser.loadingDataTimeout = 500;
+  if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
+    SceneSceneBrowser.displayArt(SceneSceneBrowser.currentPieceURL);
+  } else {
+    SceneSceneBrowser.loadingData = true;
+    SceneSceneBrowser.loadingDataTry = 0;
+    SceneSceneBrowser.loadingDataTimeout = 500;
 
-  SceneSceneBrowser.loadDataRequest();
+    SceneSceneBrowser.loadDataRequest();
+  }
 };
 
 SceneSceneBrowser.showDialog = function(title) {
@@ -303,10 +352,14 @@ SceneSceneBrowser.clean = function() {
 };
 
 SceneSceneBrowser.refresh = function() {
-  if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_GO) {
-    SceneSceneBrowser.clean();
-    SceneSceneBrowser.loadData();
-  }
+  alert("ALLEN: .refresh was called; mode is currently " + SceneSceneBrowser.mode);
+  // if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_DISPLAY_ART) {
+  SceneSceneBrowser.clean();
+  SceneSceneBrowser.loadData();
+  // } else {
+  //   SceneSceneBrowser.clean();
+  //   // TODO
+  // }
 };
 
 
@@ -413,6 +466,7 @@ SceneSceneBrowser.prototype.handleBlur = function() {
 
 SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
   alert("SceneSceneBrowser.handleKeyDown(" + keyCode + ")");
+  alert("ALLEN: SeneSeneBrowser.mode is " + SceneSceneBrowser.mode);
 
   if (keyCode == sf.key.RETURN) {
     if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES_STYLES && !SceneSceneBrowser.loadingData) {
@@ -420,6 +474,15 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
       return;
     }
+  }
+
+  // When the app is in "display single piece" mode and the user presses any button,
+  // he should return to the main screen
+  if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
+    SceneSceneBrowser.hideArt();
+    SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
+    SceneSceneBrowser.refresh();
+    return;
   }
 
   if (SceneSceneBrowser.loadingData) {
@@ -483,7 +546,9 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
         }
       } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
         SceneSceneBrowser.styleSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
-        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_STYLES_STYLES;
+        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_DISPLAY_ART;
+        SceneSceneBrowser.currentPieceURL = $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src');
+        alert("ALLEN: Art URL is " + $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src'));
         SceneSceneBrowser.refresh();
       } else {
         SceneSceneBrowser.selectedChannel = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
