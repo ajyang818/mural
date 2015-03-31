@@ -9,7 +9,7 @@ SceneSceneBrowser.MODE_NONE = -1;
 SceneSceneBrowser.MODE_ALL = 1; // [JR: used to be 0]
 SceneSceneBrowser.MODE_STYLES = 1;
 SceneSceneBrowser.MODE_STYLES_STYLES = 2;
-SceneSceneBrowser.MODE_GO = 3;
+// SceneSceneBrowser.MODE_GO = 3;  // Removing this mode for now
 SceneSceneBrowser.MODE_DISPLAY_ART = 99;
 
 SceneSceneBrowser.mode = SceneSceneBrowser.MODE_NONE;
@@ -93,12 +93,9 @@ SceneSceneBrowser.createCell = function(row_id, column_id, data_name, thumbnail,
   var infostyle = info_fill ? 'style="right: 0;"' : 'style="right: 20%;"';
 
   return $('<td id="cell_' + row_id + '_' + column_id + '" class="art_cell" data-channelname="' + data_name + '"></td>').html(
-    '<img id="thumbnail_' + row_id + '_' + column_id + '" class="art_thumbnail" src="' + thumbnail + '"/> \
-      <div class="art_text" ' + infostyle + '> \
-      <div class="art_title">' + title + '</div> \
-      <div class="art_info">' + info + '</div> \
-            <div class="art_info">' + info2 + '</div> \
-            </div>');
+              '<img id="thumbnail_' + row_id + '_' + column_id + '" class="art_thumbnail" src="' + thumbnail + '"/> \
+              <div class="art_text" ' + infostyle + '> <div class="art_title">' + title + '</div> \
+              <div class="art_info">' + info + '</div> <div class="art_info">' + info2 + '</div> </div>');
 };
 
 SceneSceneBrowser.createCellEmpty = function() {
@@ -176,23 +173,21 @@ SceneSceneBrowser.displayArt = function(artURL) {
 };
 
 SceneSceneBrowser.hideArt = function() {
+  // Hides the art to exit 'full-screen' mode; doesn't do too much right now
+  // but potential to move stuff from switchMode or elsewhere to here
   $("#single-piece-wrapper").hide();
   alert("ALLEN: .hideArt activated");
 };
 
 SceneSceneBrowser.loadDataSuccess = function(responseText) {
   var response = $.parseJSON(responseText);
-
-//  console.log(SceneSceneBrowser.mode + ' ==? ' + SceneSceneBrowser.MODE_STYLES);
-
   var response_items;
+
   if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES) {
     response_items = response.top.length;
   } else {
     response_items = response.arts.length;
   }
-
-  console.log("Response items: " + response_items);
 
   if (response_items < SceneSceneBrowser.ItemsLimit) {
     SceneSceneBrowser.dataEnded = true;
@@ -218,13 +213,8 @@ SceneSceneBrowser.loadDataSuccess = function(responseText) {
 
       if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
         var style = response.top[cursor];
-        console.log("SceneSceneBrowser.createCell(" + row_id + "," + t + "," + style.name + "," + style.url + "," + style.name + "," + style.artist + "," + "''" + ",true);");
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
-//        cell = SceneSceneBrowser.createCell(row_id, t, style.style.name, style.style.box.large, style.style.name, addCommas(style.viewers) + ' Viewers', '', true);
-      } else {
-        var art = response.arts[cursor];
-        cell = SceneSceneBrowser.createCell(row_id, t, art.channel.name, art.preview.medium, art.channel.status, art.channel.display_name, addCommas(art.viewers) + ' Viewers', false);
-      }
+      }  // There used to be an 'else' clause here, removed 3/31/15 because it seemed to do with Twitch channel viewers
 
       row.append(cell);
     }
@@ -252,14 +242,15 @@ SceneSceneBrowser.loadDataRequest = function() {
     SceneSceneBrowser.showDialog(dialog_title);
 
     var xmlHttp = new XMLHttpRequest(),
-    	  theUrl = 'art.json';
+        theUrl = 'art.json';
 
     xmlHttp.ontimeout = function() {};
     xmlHttp.onreadystatechange = function() {
       if (xmlHttp.readyState === 4) {
         if (xmlHttp.status === 200) {
           try {
-        	  console.log(xmlHttp.responseText);
+            // console.log(xmlHttp.responseText);
+            alert("xmlHttp.responseText loaded in .loadDataRequest()");
             SceneSceneBrowser.loadDataSuccess(xmlHttp.responseText);
           } catch (err) {
             SceneSceneBrowser.showDialog("loadDataSuccess() exception: " + err.name + ' ' + err.message);
@@ -317,6 +308,7 @@ SceneSceneBrowser.showInput = function() {
 };
 
 SceneSceneBrowser.switchMode = function(mode) {
+  alert("ALLEN: .switchMode called; previous mode " + SceneSceneBrowser.mode + " and new desired mode is " + mode);
   if (mode != SceneSceneBrowser.mode) {
     SceneSceneBrowser.mode = mode;
 
@@ -334,12 +326,7 @@ SceneSceneBrowser.switchMode = function(mode) {
     } else if (mode == SceneSceneBrowser.MODE_STYLES_STYLES) {
       $("#tip_icon_styles").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
-    } else if (mode == SceneSceneBrowser.MODE_GO) {
-      $("#tip_icon_open").addClass('tip_icon_active');
-      SceneSceneBrowser.clean();
-      SceneSceneBrowser.showInput();
-      SceneSceneBrowser.refreshInputFocus();
-    }
+    }  // Removed MODE_GO else if condition
   }
 };
 
@@ -353,13 +340,8 @@ SceneSceneBrowser.clean = function() {
 
 SceneSceneBrowser.refresh = function() {
   alert("ALLEN: .refresh was called; mode is currently " + SceneSceneBrowser.mode);
-  // if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_DISPLAY_ART) {
   SceneSceneBrowser.clean();
   SceneSceneBrowser.loadData();
-  // } else {
-  //   SceneSceneBrowser.clean();
-  //   // TODO
-  // }
 };
 
 
@@ -405,13 +387,6 @@ SceneSceneBrowser.refreshInputFocus = function() {
     $('#artname_input').addClass('channelname');
     $('#artname_button').addClass('button_go_focused');
   }
-};
-
-SceneSceneBrowser.openStream = function() {
-  $(window).scrollTop(0);
-  sf.scene.show('SceneChannel');
-  sf.scene.hide('SceneBrowser');
-  sf.scene.focus('SceneChannel');
 };
 
 function SceneSceneBrowser() {
@@ -466,7 +441,7 @@ SceneSceneBrowser.prototype.handleBlur = function() {
 
 SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
   alert("SceneSceneBrowser.handleKeyDown(" + keyCode + ")");
-  alert("ALLEN: SeneSeneBrowser.mode is " + SceneSceneBrowser.mode);
+  alert("ALLEN: SceneSceneBrowser.mode is " + SceneSceneBrowser.mode);
 
   if (keyCode == sf.key.RETURN) {
     if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES_STYLES && !SceneSceneBrowser.loadingData) {
@@ -481,7 +456,7 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
   if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
     SceneSceneBrowser.hideArt();
     SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
-    SceneSceneBrowser.refresh();
+    // SceneSceneBrowser.refresh();  // I think .switchMode already does this
     return;
   }
 
@@ -491,69 +466,42 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
 
   switch (keyCode) {
     case sf.key.LEFT:
-      if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_GO) {
-        if (SceneSceneBrowser.cursorX > 0) {
-          SceneSceneBrowser.removeFocus();
-          SceneSceneBrowser.cursorX--;
-          SceneSceneBrowser.addFocus();
-        }
+      if (SceneSceneBrowser.cursorX > 0) {
+        SceneSceneBrowser.removeFocus();
+        SceneSceneBrowser.cursorX--;
+        SceneSceneBrowser.addFocus();
       }
       break;
     case sf.key.RIGHT:
-      if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_GO) {
-        if (SceneSceneBrowser.cursorX < SceneSceneBrowser.getCellsCount(SceneSceneBrowser.cursorY) - 1) {
-          SceneSceneBrowser.removeFocus();
-          SceneSceneBrowser.cursorX++;
-          SceneSceneBrowser.addFocus();
-        }
+      if (SceneSceneBrowser.cursorX < SceneSceneBrowser.getCellsCount(SceneSceneBrowser.cursorY) - 1) {
+        SceneSceneBrowser.removeFocus();
+        SceneSceneBrowser.cursorX++;
+        SceneSceneBrowser.addFocus();
       }
       break;
     case sf.key.UP:
-      if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_GO) {
-        if (SceneSceneBrowser.cursorY > 0) {
-          SceneSceneBrowser.removeFocus();
-          SceneSceneBrowser.cursorY--;
-          SceneSceneBrowser.addFocus();
-        }
-      } else {
-        SceneSceneBrowser.cursorY = 0;
-        SceneSceneBrowser.refreshInputFocus();
+      if (SceneSceneBrowser.cursorY > 0) {
+        SceneSceneBrowser.removeFocus();
+        SceneSceneBrowser.cursorY--;
+        SceneSceneBrowser.addFocus();
       }
       break;
     case sf.key.DOWN:
-      if (SceneSceneBrowser.mode != SceneSceneBrowser.MODE_GO) {
-        if (SceneSceneBrowser.cursorY < SceneSceneBrowser.getRowsCount() - 1 && SceneSceneBrowser.cursorX < SceneSceneBrowser.getCellsCount(SceneSceneBrowser.cursorY + 1)) {
-          SceneSceneBrowser.removeFocus();
-          SceneSceneBrowser.cursorY++;
-          SceneSceneBrowser.addFocus();
-        }
-      } else {
-        SceneSceneBrowser.cursorY = 1;
-        SceneSceneBrowser.refreshInputFocus();
+      if (SceneSceneBrowser.cursorY < SceneSceneBrowser.getRowsCount() - 1 && SceneSceneBrowser.cursorX < SceneSceneBrowser.getCellsCount(SceneSceneBrowser.cursorY + 1)) {
+        SceneSceneBrowser.removeFocus();
+        SceneSceneBrowser.cursorY++;
+        SceneSceneBrowser.addFocus();
       }
       break;
     case sf.key.ENTER:
-      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GO) {
-        if (SceneSceneBrowser.cursorY == 0) {
-          SceneSceneBrowser.ime = new IMEShell_Common();
-          SceneSceneBrowser.ime.inputboxID = 'artname_input';
-          SceneSceneBrowser.ime.inputTitle = 'Channel name';
-          SceneSceneBrowser.ime.setOnCompleteFunc = onCompleteText;
-          SceneSceneBrowser.ime.onShow();
-        } else {
-          SceneSceneBrowser.selectedChannel = $('#artname_input').val();
-          SceneSceneBrowser.openStream();
-        }
-      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
+      // Originally there was a large if condition here for MODE_GO
+      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
         SceneSceneBrowser.styleSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
         SceneSceneBrowser.mode = SceneSceneBrowser.MODE_DISPLAY_ART;
         SceneSceneBrowser.currentPieceURL = $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src');
         alert("ALLEN: Art URL is " + $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src'));
         SceneSceneBrowser.refresh();
-      } else {
-        SceneSceneBrowser.selectedChannel = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
-        SceneSceneBrowser.openStream();
-      }
+      }  // There used to be an else condition here to invoke .openStream(); removed 3/31/2015
       break;
     case sf.key.VOL_UP:
       sf.service.setVolumeControl(true);
@@ -571,7 +519,8 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
       break;
     case sf.key.YELLOW:
-      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GO);
+      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
+      // SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GO);  // Removing GO mode for now
       break;
     case sf.key.BLUE:
       SceneSceneBrowser.refresh();
