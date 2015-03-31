@@ -1,14 +1,12 @@
 alert('SceneSceneBrowser.js loaded');
 
-SceneSceneBrowser.selectedChannel;
-
 SceneSceneBrowser.ItemsLimit = 100;
 SceneSceneBrowser.ColumnsCount = 4;
 
 SceneSceneBrowser.MODE_NONE = -1;
 SceneSceneBrowser.MODE_ALL = 1; // [JR: used to be 0]
 SceneSceneBrowser.MODE_STYLES = 1;
-SceneSceneBrowser.MODE_STYLES_STYLES = 2;
+// SceneSceneBrowser.MODE_STYLES_STYLES = 2;  // Removing this mode for now
 // SceneSceneBrowser.MODE_GO = 3;  // Removing this mode for now
 SceneSceneBrowser.MODE_DISPLAY_ART = 99;
 
@@ -323,10 +321,7 @@ SceneSceneBrowser.switchMode = function(mode) {
     } else if (mode == SceneSceneBrowser.MODE_STYLES) {
       $("#tip_icon_styles").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
-    } else if (mode == SceneSceneBrowser.MODE_STYLES_STYLES) {
-      $("#tip_icon_styles").addClass('tip_icon_active');
-      SceneSceneBrowser.refresh();
-    }  // Removed MODE_GO else if condition
+    }  // Removed MODE_STYLES_STYLES and MODE_GO else if condition
   }
 };
 
@@ -443,13 +438,7 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
   alert("SceneSceneBrowser.handleKeyDown(" + keyCode + ")");
   alert("ALLEN: SceneSceneBrowser.mode is " + SceneSceneBrowser.mode);
 
-  if (keyCode == sf.key.RETURN) {
-    if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES_STYLES && !SceneSceneBrowser.loadingData) {
-      sf.key.preventDefault();
-      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
-      return;
-    }
-  }
+  // Removed if condition for .MODE_STYLES_STYLES; removed 3/31/2015
 
   // When the app is in "display single piece" mode and the user presses any button,
   // he should return to the main screen
