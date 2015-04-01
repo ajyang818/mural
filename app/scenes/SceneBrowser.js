@@ -25,6 +25,8 @@ SceneSceneBrowser.loadingDataTry;
 SceneSceneBrowser.loadingDataTimeout;
 SceneSceneBrowser.dataEnded = false;
 
+SceneSceneBrowser.allArtData = null;
+
 var ScrollHelper = {
   documentVerticalScrollPosition: function() {
     if (self.pageYOffset) return self.pageYOffset; // Firefox, Chrome, Opera, Safari.
@@ -178,9 +180,15 @@ SceneSceneBrowser.hideArt = function() {
   alert("ALLEN: .hideArt activated");
 };
 
-SceneSceneBrowser.loadDataSuccess = function(responseText) {
-  var response = $.parseJSON(responseText);
+SceneSceneBrowser.findURLbyID = function(artID) {
+  return "http://historicphotoimage.com/store/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/M/o/Monet-000098.jpg_4.jpg";
+};
+
+SceneSceneBrowser.loadDataSuccess = function() {
+  // var response = $.parseJSON(responseText);
   var response_items;
+
+  response = SceneSceneBrowser.allArtData;
 
   if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES) {
     response_items = response.art.length;
@@ -217,7 +225,8 @@ SceneSceneBrowser.loadDataSuccess = function(responseText) {
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
       } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_MENU) {
         var style = response.genres[cursor];
-        cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
+        coverURL = SceneSceneBrowser.findURLbyID(style.cover_piece);
+        cell = SceneSceneBrowser.createCell(row_id, t, style.name, coverURL, style.name, '', '', true);
       }
 
       // There used to be an 'else' clause here, removed 3/31/15 because it seemed to do with Twitch channel viewers
@@ -240,38 +249,44 @@ SceneSceneBrowser.loadDataSuccess = function(responseText) {
 };
 
 SceneSceneBrowser.loadDataRequest = function() {
-  try {
-    var dialog_title = "";
-    if (SceneSceneBrowser.loadingDataTry > 0) {
-      dialog_title = STR_RETRYING + " (" + (SceneSceneBrowser.loadingDataTry + 1) + "/" + SceneSceneBrowser.loadingDataTryMax + ")";
-    }
-    SceneSceneBrowser.showDialog(dialog_title);
-
-    var xmlHttp = new XMLHttpRequest(),
-        theUrl = 'art.json';
-
-    xmlHttp.ontimeout = function() {};
-    xmlHttp.onreadystatechange = function() {
-      if (xmlHttp.readyState === 4) {
-        if (xmlHttp.status === 200) {
-          try {
-            // console.log(xmlHttp.responseText);
-            alert("xmlHttp.responseText loaded in .loadDataRequest()");
-            SceneSceneBrowser.loadDataSuccess(xmlHttp.responseText);
-          } catch (err) {
-            SceneSceneBrowser.showDialog("loadDataSuccess() exception: " + err.name + ' ' + err.message);
-          }
-
-        } else {
-          SceneSceneBrowser.loadDataError();
-        }
+  if (SceneSceneBrowser.allArtData !== null) {
+    SceneSceneBrowser.loadDataSuccess();
+  } else {
+    try {
+      var dialog_title = "";
+      if (SceneSceneBrowser.loadingDataTry > 0) {
+        dialog_title = STR_RETRYING + " (" + (SceneSceneBrowser.loadingDataTry + 1) + "/" + SceneSceneBrowser.loadingDataTryMax + ")";
       }
-    };
-    xmlHttp.open("GET", theUrl, true);
-    xmlHttp.timeout = SceneSceneBrowser.loadingDataTimeout;
-    xmlHttp.send(null);
-  } catch (error) {
-    SceneSceneBrowser.loadDataError();
+      SceneSceneBrowser.showDialog(dialog_title);
+
+      var xmlHttp = new XMLHttpRequest(),
+          theUrl = 'art.json';
+
+      xmlHttp.ontimeout = function() {};
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4) {
+          if (xmlHttp.status === 200) {
+            try {
+              // console.log(xmlHttp.responseText);
+              alert("xmlHttp.responseText loaded in .loadDataRequest()");
+              SceneSceneBrowser.allArtData = $.parseJSON(xmlHttp.responseText);
+              // SceneSceneBrowser.loadDataSuccess(xmlHttp.responseText);
+              SceneSceneBrowser.loadDataSuccess();
+            } catch (err) {
+              SceneSceneBrowser.showDialog("loadDataSuccess() exception: " + err.name + ' ' + err.message);
+            }
+
+          } else {
+            SceneSceneBrowser.loadDataError();
+          }
+        }
+      };
+      xmlHttp.open("GET", theUrl, true);
+      xmlHttp.timeout = SceneSceneBrowser.loadingDataTimeout;
+      xmlHttp.send(null);
+    } catch (error) {
+      SceneSceneBrowser.loadDataError();
+    }
   }
 };
 
@@ -329,7 +344,11 @@ SceneSceneBrowser.switchMode = function(mode) {
     } else if (mode == SceneSceneBrowser.MODE_STYLES) {
       $("#tip_icon_styles").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
-    }  // Removed MODE_STYLES_STYLES and MODE_GO else if condition
+    }  else if (mode == SceneSceneBrowser.MODE_GENRE_MENU) {
+      $("#tip_icon_styles").addClass('tip_icon_active');
+      SceneSceneBrowser.refresh();
+    }
+    // Removed MODE_STYLES_STYLES and MODE_GO else if condition
   }
 };
 
@@ -513,7 +532,7 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ALL);
       break;
     case sf.key.GREEN:
-      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
+      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GENRE_MENU);
       break;
     case sf.key.YELLOW:
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
