@@ -182,7 +182,7 @@ SceneSceneBrowser.loadDataSuccess = function(responseText) {
   var response_items;
 
   if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES) {
-    response_items = response.top.length;
+    response_items = response.art.length;
   } else {
     response_items = response.arts.length;
   }
@@ -210,7 +210,7 @@ SceneSceneBrowser.loadDataSuccess = function(responseText) {
       var cell;
 
       if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
-        var style = response.top[cursor];
+        var style = response.art[cursor];
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
       }  // There used to be an 'else' clause here, removed 3/31/15 because it seemed to do with Twitch channel viewers
 
