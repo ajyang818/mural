@@ -42,7 +42,7 @@
 		"name": "Lydia Martin",
 		"cover_piece": "martin-orchids"
 	}],
-	"genre": [{
+	"genres": [{
 		"name": "Impressionism",
 		"cover_piece": "monet-sunrise"
 	}]

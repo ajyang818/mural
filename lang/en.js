@@ -1,8 +1,8 @@
 alert("English (en) loaded");
-var STR_CHANNELS = "Styles";
-var STR_STYLES = "Paintings";
-var STR_OPEN = "Open";
-var STR_REFRESH = "Refresh";
+var STR_PLAYLISTS = "Playlists";
+var STR_GENRES = "By Genre";
+var STR_ARTIST = "By Artist";
+var STR_All = "All";
 
 var STR_PLACEHOLDER_OPEN = "Enter style name...";
 

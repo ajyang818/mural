@@ -6,6 +6,7 @@ SceneSceneBrowser.ColumnsCount = 4;
 SceneSceneBrowser.MODE_NONE = -1;
 SceneSceneBrowser.MODE_ALL = 1; // [JR: used to be 0]
 SceneSceneBrowser.MODE_STYLES = 1;
+SceneSceneBrowser.MODE_GENRE_MENU = 2;
 // SceneSceneBrowser.MODE_STYLES_STYLES = 2;  // Removing this mode for now
 // SceneSceneBrowser.MODE_GO = 3;  // Removing this mode for now
 SceneSceneBrowser.MODE_DISPLAY_ART = 99;
@@ -183,6 +184,8 @@ SceneSceneBrowser.loadDataSuccess = function(responseText) {
 
   if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES) {
     response_items = response.art.length;
+  } else if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRE_MENU) {
+    response_items = response.genres.length;
   } else {
     response_items = response.arts.length;
   }
@@ -212,7 +215,12 @@ SceneSceneBrowser.loadDataSuccess = function(responseText) {
       if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
         var style = response.art[cursor];
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
-      }  // There used to be an 'else' clause here, removed 3/31/15 because it seemed to do with Twitch channel viewers
+      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_MENU) {
+        var style = response.genres[cursor];
+        cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
+      }
+
+      // There used to be an 'else' clause here, removed 3/31/15 because it seemed to do with Twitch channel viewers
 
       row.append(cell);
     }
@@ -390,10 +398,10 @@ function SceneSceneBrowser() {
 
 SceneSceneBrowser.initLanguage = function() {
   //set correct labels
-  $('.label_channels').html(STR_CHANNELS);
-  $('.label_styles').html(STR_STYLES);
-  $('.label_open').html(STR_OPEN);
-  $('.label_refresh').html(STR_REFRESH);
+  $('.label_channels').html(STR_PLAYLISTS);
+  $('.label_styles').html(STR_GENRES);
+  $('.label_open').html(STR_ARTIST);
+  $('.label_refresh').html(STR_All);
   $('.label_placeholder_open').attr("placeholder", STR_PLACEHOLDER_OPEN);
 };
 
