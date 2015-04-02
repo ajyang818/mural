@@ -184,18 +184,36 @@ SceneSceneBrowser.findURLbyID = function(artID) {
   return "http://historicphotoimage.com/store/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/M/o/Monet-000098.jpg_4.jpg";
 };
 
+SceneSceneBrowser.filterByCriteria = function(filterKey, filterValue) {
+  // Helper function that will look through the entire list of "art" in art.json and pull out entries
+  // with filterValue in the filterKey. Good for "filtering" by genre or artist.
+  alert("ALLEN: .filterByCriteria called for key " + filterKey + " and filterValue " + filterValue);
+  bodyToFilter = SceneSceneBrowser.allArtData.art;
+  var results = {"art": []};
+  for (var ind = 0; ind < bodyToFilter.length; ind++) {
+    if (bodyToFilter[ind][filterKey] === filterValue) {
+      results.art.push(bodyToFilter[ind]);
+    }
+  }
+  return results;
+};
+
 SceneSceneBrowser.loadDataSuccess = function() {
   // var response = $.parseJSON(responseText);
   var response_items;
 
-  response = SceneSceneBrowser.allArtData;
+  if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRE_SPECIFIC) {
+    response = SceneSceneBrowser.filterByCriteria("genre", SceneSceneBrowser.genreSelected);
+  } else {
+    response = SceneSceneBrowser.allArtData;
+  }
 
   if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES) {
     response_items = response.art.length;
   } else if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRE_MENU) {
     response_items = response.genres.length;
   } else {
-    response_items = response.arts.length;
+    response_items = response.art.length;
   }
 
   if (response_items < SceneSceneBrowser.ItemsLimit) {
@@ -220,7 +238,7 @@ SceneSceneBrowser.loadDataSuccess = function() {
     for (t = 0; t < SceneSceneBrowser.ColumnsCount && cursor < response_items; t++, cursor++) {
       var cell;
 
-      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
+      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC) {
         var style = response.art[cursor];
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
       } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_MENU) {
@@ -267,15 +285,12 @@ SceneSceneBrowser.loadDataRequest = function() {
         if (xmlHttp.readyState === 4) {
           if (xmlHttp.status === 200) {
             try {
-              // console.log(xmlHttp.responseText);
               alert("xmlHttp.responseText loaded in .loadDataRequest()");
-              SceneSceneBrowser.allArtData = $.parseJSON(xmlHttp.responseText);
-              // SceneSceneBrowser.loadDataSuccess(xmlHttp.responseText);
+              SceneSceneBrowser.allArtData = $.parseJSON(xmlHttp.responseText);  // Saving the entire art.json to the object saves load time
               SceneSceneBrowser.loadDataSuccess();
             } catch (err) {
               SceneSceneBrowser.showDialog("loadDataSuccess() exception: " + err.name + ' ' + err.message);
             }
-
           } else {
             SceneSceneBrowser.loadDataError();
           }
@@ -511,11 +526,16 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       break;
     case sf.key.ENTER:
       // Originally there was a large if condition here for MODE_GO
-      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES) {
+      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC) {
         SceneSceneBrowser.styleSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
         SceneSceneBrowser.mode = SceneSceneBrowser.MODE_DISPLAY_ART;
         SceneSceneBrowser.currentPieceURL = $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src');
         alert("ALLEN: Art URL is " + $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src'));
+        SceneSceneBrowser.refresh();
+      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_MENU) {
+        SceneSceneBrowser.genreSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
+        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_GENRE_SPECIFIC;
+        alert("ALLEN: Specific Genre chosen");
         SceneSceneBrowser.refresh();
       }  // There used to be an else condition here to invoke .openStream(); removed 3/31/2015
       break;
