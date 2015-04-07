@@ -4,11 +4,12 @@ SceneSceneBrowser.ItemsLimit = 100;
 SceneSceneBrowser.ColumnsCount = 4;
 
 SceneSceneBrowser.MODE_NONE = -1;
-SceneSceneBrowser.MODE_ALL = 1; // [JR: used to be 0]
+SceneSceneBrowser.MODE_ALL = 1;
 SceneSceneBrowser.MODE_STYLES = 1;
 SceneSceneBrowser.MODE_GENRE_MENU = 2;
-// SceneSceneBrowser.MODE_STYLES_STYLES = 2;  // Removing this mode for now
-// SceneSceneBrowser.MODE_GO = 3;  // Removing this mode for now
+SceneSceneBrowser.MODE_GENRE_SPECIFIC = 20;
+SceneSceneBrowser.MODE_ARTIST_MENU = 3;
+SceneSceneBrowser.MODE_ARTIST_SPECIFIC = 30;
 SceneSceneBrowser.MODE_DISPLAY_ART = 99;
 
 SceneSceneBrowser.mode = SceneSceneBrowser.MODE_NONE;
@@ -61,7 +62,7 @@ var ScrollHelper = {
    */
   scrollVerticalToElementById: function(id, padding) {
     var element = document.getElementById(id);
-    if (element == null) {
+    if (element === null) {
       console.warn('Cannot find element with id \'' + id + '\'.');
       return;
     }
@@ -93,7 +94,7 @@ function sleep(millis, callback) {
 SceneSceneBrowser.createCell = function(row_id, column_id, data_name, thumbnail, title, info, info2, info_fill) {
   var infostyle = info_fill ? 'style="right: 0;"' : 'style="right: 20%;"';
 
-  return $('<td id="cell_' + row_id + '_' + column_id + '" class="art_cell" data-channelname="' + data_name + '"></td>').html(
+  return $('<td id="cell_' + row_id + '_' + column_id + '" class="art_cell" data-channelname="' + data_name + '" data-artistname="' + info + '"></td>').html(
               '<img id="thumbnail_' + row_id + '_' + column_id + '" class="art_thumbnail" src="' + thumbnail + '"/> \
               <div class="art_text" ' + infostyle + '> <div class="art_title">' + title + '</div> \
               <div class="art_info">' + info + '</div> <div class="art_info">' + info2 + '</div> </div>');
@@ -204,11 +205,12 @@ SceneSceneBrowser.filterByCriteria = function(filterKey, filterValue) {
 };
 
 SceneSceneBrowser.loadDataSuccess = function() {
-  // var response = $.parseJSON(responseText);
   var response_items;
 
   if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRE_SPECIFIC) {
     response = SceneSceneBrowser.filterByCriteria("genre", SceneSceneBrowser.genreSelected);
+  } else if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_ARTIST_SPECIFIC) {
+    response = SceneSceneBrowser.filterByCriteria("artist", SceneSceneBrowser.artistSelected);
   } else {
     response = SceneSceneBrowser.allArtData;
   }
@@ -217,6 +219,8 @@ SceneSceneBrowser.loadDataSuccess = function() {
     response_items = response.art.length;
   } else if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRE_MENU) {
     response_items = response.genres.length;
+  } else if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_ARTIST_MENU) {
+    response_items = response.artist.length;
   } else {
     response_items = response.art.length;
   }
@@ -241,18 +245,22 @@ SceneSceneBrowser.loadDataSuccess = function() {
     var row = $('<tr></tr>');
 
     for (t = 0; t < SceneSceneBrowser.ColumnsCount && cursor < response_items; t++, cursor++) {
-      var cell;
+      var cell, style;
 
-      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC) {
-        var style = response.art[cursor];
+      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ARTIST_SPECIFIC) {
+        style = response.art[cursor];
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
       } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_MENU) {
-        var style = response.genres[cursor];
+        // When we load the "genres" section of art.json, each listing doesn't have artist info, and 'style.name' is the name of the genre
+        style = response.genres[cursor];
         coverURL = SceneSceneBrowser.findURLbyID(style.cover_piece);
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, coverURL, style.name, '', '', true);
+      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ARTIST_MENU) {
+        // When we load the "artist" section of art.json, each listing doesn't have genre info, and 'style.name' is the name of the artist
+        style = response.artist[cursor];
+        coverURL = SceneSceneBrowser.findURLbyID(style.cover_piece);
+        cell = SceneSceneBrowser.createCell(row_id, t, style.name, coverURL, '', style.name, '', true);
       }
-
-      // There used to be an 'else' clause here, removed 3/31/15 because it seemed to do with Twitch channel viewers
 
       row.append(cell);
     }
@@ -312,7 +320,7 @@ SceneSceneBrowser.loadDataRequest = function() {
 
 SceneSceneBrowser.loadData = function() {
   // Even though loading data after end is safe it is pointless and causes lag
-  if ((SceneSceneBrowser.itemsCount % SceneSceneBrowser.ColumnsCount != 0) || SceneSceneBrowser.loadingData) {
+  if ((SceneSceneBrowser.itemsCount % SceneSceneBrowser.ColumnsCount !== 0) || SceneSceneBrowser.loadingData) {
     return;
   }
 
@@ -367,8 +375,10 @@ SceneSceneBrowser.switchMode = function(mode) {
     }  else if (mode == SceneSceneBrowser.MODE_GENRE_MENU) {
       $("#tip_icon_styles").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
+    }  else if (mode == SceneSceneBrowser.MODE_ARTIST_MENU) {
+      $("#tip_icon_styles").addClass('tip_icon_active');
+      SceneSceneBrowser.refresh();
     }
-    // Removed MODE_STYLES_STYLES and MODE_GO else if condition
   }
 };
 
@@ -422,7 +432,7 @@ SceneSceneBrowser.refreshInputFocus = function() {
   $('#artname_button').removeClass('button_go');
   $('#artname_button').removeClass('button_go_focused');
 
-  if (SceneSceneBrowser.cursorY == 0) {
+  if (SceneSceneBrowser.cursorY === 0) {
     $('#artname_input').addClass('channelname_focused');
     $('#artname_button').addClass('button_go');
   } else {
@@ -452,9 +462,7 @@ SceneSceneBrowser.prototype.initialize = function() {
   // scene HTML and CSS will be loaded before this function is called
 
   SceneSceneBrowser.initLanguage();
-
   SceneSceneBrowser.loadingData = false;
-
   SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ALL);
 };
 
@@ -530,8 +538,8 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       }
       break;
     case sf.key.ENTER:
-      // Originally there was a large if condition here for MODE_GO
-      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC) {
+      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC ||
+        SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ARTIST_SPECIFIC) {
         SceneSceneBrowser.styleSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
         SceneSceneBrowser.mode = SceneSceneBrowser.MODE_DISPLAY_ART;
         SceneSceneBrowser.currentPieceURL = $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src');
@@ -542,7 +550,12 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
         SceneSceneBrowser.mode = SceneSceneBrowser.MODE_GENRE_SPECIFIC;
         alert("ALLEN: Specific Genre chosen");
         SceneSceneBrowser.refresh();
-      }  // There used to be an else condition here to invoke .openStream(); removed 3/31/2015
+      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ARTIST_MENU) {
+        SceneSceneBrowser.artistSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-artistname');
+        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_ARTIST_SPECIFIC;
+        alert("ALLEN: Specific Artist chosen: " + SceneSceneBrowser.artistSelected);
+        SceneSceneBrowser.refresh();
+      }
       break;
     case sf.key.VOL_UP:
       sf.service.setVolumeControl(true);
@@ -560,8 +573,7 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GENRE_MENU);
       break;
     case sf.key.YELLOW:
-      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
-      // SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GO);  // Removing GO mode for now
+      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ARTIST_MENU);
       break;
     case sf.key.BLUE:
       SceneSceneBrowser.refresh();
