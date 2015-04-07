@@ -264,9 +264,9 @@ SceneSceneBrowser.loadDataSuccess = function() {
     $('#art_table').append(row);
   }
 
-  sleep(2000, function() {
-    SceneSceneBrowser.showTable();
+  sleep(250, function() {
     SceneSceneBrowser.addFocus();
+    SceneSceneBrowser.showTable();
     SceneSceneBrowser.loadingData = false;
   });
 };
