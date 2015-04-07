@@ -5,7 +5,6 @@ SceneSceneBrowser.ColumnsCount = 4;
 
 SceneSceneBrowser.MODE_NONE = -1;
 SceneSceneBrowser.MODE_ALL = 1;
-SceneSceneBrowser.MODE_STYLES = 1;
 SceneSceneBrowser.MODE_GENRE_MENU = 2;
 SceneSceneBrowser.MODE_GENRE_SPECIFIC = 20;
 SceneSceneBrowser.MODE_ARTIST_MENU = 3;
@@ -215,7 +214,7 @@ SceneSceneBrowser.loadDataSuccess = function() {
     response = SceneSceneBrowser.allArtData;
   }
 
-  if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_STYLES) {
+  if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_ALL) {
     response_items = response.art.length;
   } else if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRE_MENU) {
     response_items = response.genres.length;
@@ -247,7 +246,7 @@ SceneSceneBrowser.loadDataSuccess = function() {
     for (t = 0; t < SceneSceneBrowser.ColumnsCount && cursor < response_items; t++, cursor++) {
       var cell, style;
 
-      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ARTIST_SPECIFIC) {
+      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ALL || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ARTIST_SPECIFIC) {
         style = response.art[cursor];
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, style.url, style.name, style.artist, '', true);
       } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_MENU) {
@@ -361,22 +360,19 @@ SceneSceneBrowser.switchMode = function(mode) {
   if (mode != SceneSceneBrowser.mode) {
     SceneSceneBrowser.mode = mode;
 
-    $("#tip_icon_channels").removeClass('tip_icon_active');
-    $("#tip_icon_styles").removeClass('tip_icon_active');
-    $("#tip_icon_open").removeClass('tip_icon_active');
-    $("#tip_icon_refresh").removeClass('tip_icon_active');
+    $("#tip_icon_playlists").removeClass('tip_icon_active');
+    $("#tip_icon_genres").removeClass('tip_icon_active');
+    $("#tip_icon_artist").removeClass('tip_icon_active');
+    $("#tip_icon_all").removeClass('tip_icon_active');
 
     if (mode == SceneSceneBrowser.MODE_ALL) {
-      $("#tip_icon_channels").addClass('tip_icon_active');
+      $("#tip_icon_all").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
-    } else if (mode == SceneSceneBrowser.MODE_STYLES) {
-      $("#tip_icon_styles").addClass('tip_icon_active');
-      SceneSceneBrowser.refresh();
-    }  else if (mode == SceneSceneBrowser.MODE_GENRE_MENU) {
-      $("#tip_icon_styles").addClass('tip_icon_active');
+    } else if (mode == SceneSceneBrowser.MODE_GENRE_MENU) {
+      $("#tip_icon_genres").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
     }  else if (mode == SceneSceneBrowser.MODE_ARTIST_MENU) {
-      $("#tip_icon_styles").addClass('tip_icon_active');
+      $("#tip_icon_artist").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
     }
   }
@@ -493,13 +489,11 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
   alert("SceneSceneBrowser.handleKeyDown(" + keyCode + ")");
   alert("ALLEN: SceneSceneBrowser.mode is " + SceneSceneBrowser.mode);
 
-  // Removed if condition for .MODE_STYLES_STYLES; removed 3/31/2015
-
   // When the app is in "display single piece" mode and the user presses any button,
   // he should return to the main screen
   if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
     SceneSceneBrowser.hideArt();
-    SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_STYLES);
+    SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ALL);
     // SceneSceneBrowser.refresh();  // I think .switchMode already does this
     return;
   }
@@ -538,7 +532,7 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       }
       break;
     case sf.key.ENTER:
-      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_STYLES || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC ||
+      if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ALL || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_SPECIFIC ||
         SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ARTIST_SPECIFIC) {
         SceneSceneBrowser.styleSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
         SceneSceneBrowser.mode = SceneSceneBrowser.MODE_DISPLAY_ART;
@@ -576,7 +570,7 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ARTIST_MENU);
       break;
     case sf.key.BLUE:
-      SceneSceneBrowser.refresh();
+      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ALL);
       break;
     default:
       alert("handle default key event, key code(" + keyCode + ")");
