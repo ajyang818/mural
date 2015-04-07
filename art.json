@@ -4,31 +4,31 @@
 		"name": "Orchids",
 		"artist": "Lydia Martin",
 		"genre": "Modern",
-		"id": "martin-orchids"
+		"uid": "martin-orchids"
 	},{
 		"url": "http://www.arkansasarts.org/images/registry/tn_JonesIVSam_DancersInThePaint1.jpg?maxwidth=674&maxheight=400",
 		"name": "Dancers in the Paint",
 		"artist": "Sam Jones",
 		"genre": "Digital",
-		"id": "jones-dancers"
+		"uid": "jones-dancers"
 	},{
 		"url": "http://vultus.stblogs.org/Sacre-Coeur-1.jpg",
 		"name": "Sacre Coeur",
 		"artist": "Vultus",
 		"genre": "Religious",
-		"id": "vultus-sacre"
+		"uid": "vultus-sacre"
 	},{
 		"url": "http://www.wittemuseum.org/images/stories/exhibits/tximpressionism/EXHIBITTexasImpressionism.jpg",
 		"name": "Tranquil Afternoon",
 		"artist": "Louis Oscar Griffith",
 		"genre": "Impressionism",
-		"id": "griffith-tranquil"
+		"uid": "griffith-tranquil"
 	},{
 		"url": "http://historicphotoimage.com/store/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/M/o/Monet-000098.jpg_4.jpg",
 		"name": "Sunrise",
 		"artist": "Claude Monet",
 		"genre": "Impressionism",
-		"id": "monet-sunrise"
+		"uid": "monet-sunrise"
 	}],
 	"moods": [{
 		"name": "Happy",
@@ -44,6 +44,6 @@
 	}],
 	"genres": [{
 		"name": "Impressionism",
-		"cover_piece": "monet-sunrise"
+		"cover_piece": "griffith-tranquil"
 	}]
 }

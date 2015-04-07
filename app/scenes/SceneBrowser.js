@@ -181,7 +181,12 @@ SceneSceneBrowser.hideArt = function() {
 };
 
 SceneSceneBrowser.findURLbyID = function(artID) {
-  return "http://historicphotoimage.com/store/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/M/o/Monet-000098.jpg_4.jpg";
+  allArt = SceneSceneBrowser.allArtData.art;
+  for (var ind = 0; ind < allArt.length; ind++) {
+    if (allArt[ind].uid === artID) {
+      return allArt[ind].url;
+    }
+  }
 };
 
 SceneSceneBrowser.filterByCriteria = function(filterKey, filterValue) {
