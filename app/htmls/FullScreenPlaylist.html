@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<link rel="stylesheet" type="text/css" href="../stylesheets/FullscreenPlaylist.css" />
+		<script src="../scenes/modernizr.custom.js"></script>
+	</head>
+	<body>
+		<div class="container">	
+			<div class="main">
+				<ul id="cbp-bislideshow" class="cbp-bislideshow"></ul>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="../scenes/jquery.imagesloaded.min.js"></script>
+		<script src="../scenes/cbpBGSlideshow.js"></script>
+		<script>
+			$(function() {
+				var imgs = [{src: '../images/1.jpg', alt: 'image01'},
+							{src: '../images/2.jpg', alt: 'image02'},
+							{src: '../images/3.jpg', alt: 'image03'},
+							{src: '../images/4.jpg', alt: 'image04'},
+							{src: '../images/5.jpg', alt: 'image05'},
+							{src: '../images/6.jpg', alt: 'image06'}];				
+				
+				$(imgs).each(function(key, value) {
+					$('#cbp-bislideshow').append('<li><img src="' + value.src + '" alt="' + value.alt + '"/></li>');	
+				});
+				
+				cbpBGSlideshow.init();
+			});
+		</script>
+	</body>
+</html>
