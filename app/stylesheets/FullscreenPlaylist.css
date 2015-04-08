@@ -1,0 +1,34 @@
+#cbp-bislideshow {
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*z-index: -1;*/
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    display: block;
+}
+
+#cbp-bislideshow img {
+    position: absolute;
+/*    width: 100%;
+    height: 100%;*/
+    top: 0;
+    left: 0;
+    display: block;
+/*    background-size: cover;
+    background-position: center center;*/
+}
+
+/* If background-size supported we'll add the images to the background of the li */
+
+
+/* ...and hide the images */
+#cbp-bislideshow li img {
+    /*display: none;*/
+    display: block;
+    /*width: 100%;*/
+}

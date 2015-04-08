@@ -27,6 +27,9 @@ SceneSceneBrowser.dataEnded = false;
 
 SceneSceneBrowser.allArtData = null;
 
+SceneSceneBrowser.allTimeouts = [];
+SceneSceneBrowser.playlistInterval = null;
+
 var ScrollHelper = {
   documentVerticalScrollPosition: function() {
     if (self.pageYOffset) return self.pageYOffset; // Firefox, Chrome, Opera, Safari.
@@ -171,6 +174,61 @@ SceneSceneBrowser.displayArt = function(artURL) {
     }
     $("#single-piece-wrapper").show();
   });
+};
+
+SceneSceneBrowser.displayPlaylist = function(artURL) {
+  // $("#playlist-wrapper").css("height", null);
+  // $("#playlist-wrapper").css("width", null);
+
+  // var artList = [
+  //   {src: "http://vultus.stblogs.org/Sacre-Coeur-1.jpg", alt: "test3"},
+  //   {src: "http://www.arkansasarts.org/images/registry/tn_JonesIVSam_DancersInThePaint1.jpg?maxwidth=674&maxheight=400", alt: "test2"},
+  //   {src: "http://lydiafmartinblog.files.wordpress.com/2013/09/img_4247.jpg", alt: "test1"},
+  //   {src: "http://www.wittemuseum.org/images/stories/exhibits/tximpressionism/EXHIBITTexasImpressionism.jpg", alt: "test4"}
+  // ];
+
+  $("#single-piece").empty();
+  $("#single-piece").css("height", null);
+  $("#single-piece").css("width", null);
+
+  // Add a placeholder for the piece
+  $("#single-piece").append('<img id="display-art" />');
+
+  // Load the piece, but scale the image to full-screen after it's loaded
+  var imgLoad = $("#display-art");
+  imgLoad.attr("src", artURL);
+  imgLoad.unbind("load");
+  imgLoad.bind("load", function () {
+    var artHeight = this.height,
+        artWidth = this.width,
+        wrapperHeight = $("#single-piece-wrapper").height(),
+        wrapperWidth = $("#single-piece-wrapper").width(),
+        artRatio = artHeight / artWidth,
+        wrapperRatio = wrapperHeight / wrapperWidth;
+
+    // To determine whether to make the height or width 100% of the container,
+    // we need to compare the ratio of height to width
+    if (artRatio > wrapperRatio) {
+      $("#single-piece").height("100%");
+      $("#display-art").height("100%");
+      alert("ALLEN: height set to 100%");
+    } else {
+      $("#single-piece").width("100%");
+      $("#display-art").width("100%");
+      alert("ALLEN: width set to 100%");
+    }
+    $("#single-piece-wrapper").show();
+  });
+
+  // $(artList).each(function(key, value) {
+  //   alert("Appending image: " + value.alt);
+  //   $('#cbp-bislideshow').append('<img src="' + value.src + '" alt="' + value.alt + '" height="10%" width="10%" />');
+  // });
+
+  // $("#playlist-wrapper").show();
+  // $(artList).promise().done( function() {
+  // cbpBGSlideshow.init();
+  // });
 };
 
 SceneSceneBrowser.hideArt = function() {
@@ -324,7 +382,26 @@ SceneSceneBrowser.loadData = function() {
   }
 
   if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
-    SceneSceneBrowser.displayArt(SceneSceneBrowser.currentPieceURL);
+
+    // SceneSceneBrowser.displayArt(SceneSceneBrowser.currentPieceURL);
+
+    var artList = [
+      {src: "http://vultus.stblogs.org/Sacre-Coeur-1.jpg", alt: "test3"},
+      {src: "http://www.arkansasarts.org/images/registry/tn_JonesIVSam_DancersInThePaint1.jpg?maxwidth=674&maxheight=400", alt: "test2"},
+      {src: "http://lydiafmartinblog.files.wordpress.com/2013/09/img_4247.jpg", alt: "test1"},
+      {src: "http://www.wittemuseum.org/images/stories/exhibits/tximpressionism/EXHIBITTexasImpressionism.jpg", alt: "test4"}
+    ];
+
+    var ind = 1,
+        totalMod = artList.length;
+
+    SceneSceneBrowser.displayPlaylist(artList[ind].src);
+    SceneSceneBrowser.playlistInterval = setInterval(function(){
+      alert('loop!' + ind);
+      SceneSceneBrowser.displayPlaylist(artList[(ind % totalMod)].src);
+      ind++;
+    }, 1000);
+
   } else {
     SceneSceneBrowser.loadingData = true;
     SceneSceneBrowser.loadingDataTry = 0;
@@ -492,6 +569,8 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
   // When the app is in "display single piece" mode and the user presses any button,
   // he should return to the main screen
   if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
+    clearInterval(SceneSceneBrowser.playlistInterval);
+
     SceneSceneBrowser.hideArt();
     SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ALL);
     // SceneSceneBrowser.refresh();  // I think .switchMode already does this
