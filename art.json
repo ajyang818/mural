@@ -30,12 +30,21 @@
 		"genre": "Impressionism",
 		"uid": "monet-sunrise"
 	}],
-	"moods": [{
-		"name": "Happy",
+	"playlists": [{
+		"playlist_name": "Musing",
 		"icon": "http://placekitten.com/200/200",
 		"contents": [
 			"martin-orchids",
-			"jones-dancers"
+			"monet-sunrise",
+			"griffith-tranquil"
+		]
+	}, {
+		"playlist_name": "Adventurous",
+		"icon": "http://placekitten.com/200/200",
+		"contents": [
+			"jones-dancers",
+			"vultus-sacre",
+			"martin-orchids"
 		]
 	}],
 	"artist": [{
