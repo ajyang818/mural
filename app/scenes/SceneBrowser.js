@@ -31,7 +31,7 @@ SceneSceneBrowser.dataEnded = false;
 SceneSceneBrowser.allArtData = null;
 
 SceneSceneBrowser.allTimeouts = [];
-SceneSceneBrowser.playlistInterval = null;
+SceneSceneBrowser.playlistIntervalTime = 30000;
 
 SceneSceneBrowser.currentPlaylistName = null;
 
@@ -208,7 +208,7 @@ SceneSceneBrowser.displayPlaylist = function(playlistName) {
     ind2++;
     alert('Playlist loop! ' + ind2);
     SceneSceneBrowser.displayArt(artList[(ind2 % totalMod)]);
-  }, 1000);
+  }, SceneSceneBrowser.playlistIntervalTime);
 };
 
 SceneSceneBrowser.hideArt = function() {

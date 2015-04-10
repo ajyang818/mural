@@ -1,58 +1,214 @@
 {
 	"art": [{
-		"url": "http://lydiafmartinblog.files.wordpress.com/2013/09/img_4247.jpg",
-		"name": "Orchids",
-		"artist": "Lydia Martin",
-		"genre": "Modern",
-		"uid": "martin-orchids"
-	},{
-		"url": "http://www.arkansasarts.org/images/registry/tn_JonesIVSam_DancersInThePaint1.jpg?maxwidth=674&maxheight=400",
-		"name": "Dancers in the Paint",
-		"artist": "Lydia Martin",
-		"genre": "Digital",
-		"uid": "jones-dancers"
-	},{
-		"url": "http://vultus.stblogs.org/Sacre-Coeur-1.jpg",
-		"name": "Sacre Coeur",
-		"artist": "Vultus",
-		"genre": "Religious",
-		"uid": "vultus-sacre"
-	},{
-		"url": "http://www.wittemuseum.org/images/stories/exhibits/tximpressionism/EXHIBITTexasImpressionism.jpg",
-		"name": "Tranquil Afternoon",
-		"artist": "Louis Oscar Griffith",
-		"genre": "Impressionism",
-		"uid": "griffith-tranquil"
-	},{
 		"url": "http://historicphotoimage.com/store/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/M/o/Monet-000098.jpg_4.jpg",
 		"name": "Sunrise",
 		"artist": "Claude Monet",
 		"genre": "Impressionism",
 		"uid": "monet-sunrise"
+	},{
+		"url": "https://lh6.googleusercontent.com/-tV23yVvwF8A/VSbxfmR1LNI/AAAAAAAAFfg/RSt1cGpAnf0/w1728-h1296-no/abstract_colors_in_bloom.jpg",
+		"name": "Colors in Bloom",
+		"artist": "Unknown",
+		"genre": "Abstract",
+		"uid": "unknown-colors-bloom"
+	},{
+		"url": "https://lh3.googleusercontent.com/-rT272bVvXZk/VSbyEiveb9I/AAAAAAAAFik/vB2UyAf65oQ/w1846-h1384-no/Abstract%2B-%2BDreams.jpg",
+		"name": "Dreams",
+		"artist": "Unknown",
+		"genre": "Abstract",
+		"uid": "unknown-dreams"
+	},{
+		"url": "https://lh6.googleusercontent.com/OhbKiVGOAw7GkX30QKG616jjLHZ4OXNHNmZNnqkmj2c=w1846-h1384-no",
+		"name": "Clouded Mind",
+		"artist": "Unknown",
+		"genre": "Abstract",
+		"uid": "unknown-clouded-mind"
+	},{
+		"url": "https://lh5.googleusercontent.com/-a4QnVsTauNM/VSbyLSCh1wI/AAAAAAAAFhU/h8k3SLNkQeE/w1820-h1384-no/Pop%2BArt%2B-%2BCartoon%2BExplosion.jpg",
+		"name": "Cartoon Explosion",
+		"artist": "Unknown",
+		"genre": "Pop",
+		"uid": "unknown-cartoon-explosion"
+	},{
+		"url": "https://lh5.googleusercontent.com/-InLZ4IAt64k/VSbyLsvMf8I/AAAAAAAAFhc/WHiyaD98IQc/w1976-h1384-no/Pop%2BArt%2B-%2BGossip.jpg",
+		"name": "Gossip",
+		"artist": "Unknown",
+		"genre": "Pop",
+		"uid": "unknown-gossip"
+	},{
+		"url": "https://lh3.googleusercontent.com/-BcLqGuucqeo/VSbyMH9XQ-I/AAAAAAAAFhk/Y3Zuu1uNKuM/w2128-h1296-no/Pop%2BArt%2B-%2BRetro.jpg",
+		"name": "Retro",
+		"artist": "Unknown",
+		"genre": "Pop",
+		"uid": "unknown-retro"
+	},{
+		"url": "https://lh4.googleusercontent.com/-hyAuh8LKu8E/VSbyNSFiOBI/AAAAAAAAFh8/tVOwurcxfnc/w2080-h1384-no/Skylines%2B-%2BNew%2BYork%2BCity.jpg",
+		"name": "New York",
+		"artist": "Unknown",
+		"genre": "Skylines",
+		"uid": "unknown-new-york"
+	},{
+		"url": "https://lh3.googleusercontent.com/-zdKtDVej60I/VSbyM59jmiI/AAAAAAAAFh0/2wKJ9F7ShEE/w2074-h1384-no/Skylines%2B-%2BLondon.jpg",
+		"name": "London",
+		"artist": "Unknown",
+		"genre": "Skylines",
+		"uid": "unknown-london"
+	},{
+		"url": "https://lh5.googleusercontent.com/-WRt8CtS4lB4/VSbyMYrxxwI/AAAAAAAAFhs/yN4dvYbNMAY/w2074-h1384-no/Skylines%2B-%2BHong%2BKong.jpg",
+		"name": "Hong Kong",
+		"artist": "Unknown",
+		"genre": "Skylines",
+		"uid": "unknown-hong-kong"
+	},{
+		"url": "https://lh3.googleusercontent.com/-9ib986qCba0/VSbyHYw0oCI/AAAAAAAAFgg/9RPDpjZbvq0/w1958-h1384-no/Flowers%2B-%2BJungle%2BMonochrome.jpg",
+		"name": "Jungle Monochrome",
+		"artist": "Unknown",
+		"genre": "Flowers",
+		"uid": "unknown-jungle-monochrome"
+	},{
+		"url": "https://lh5.googleusercontent.com/-iLN3o4_1HqY/VSbyHxF4MTI/AAAAAAAAFgs/quC-07i_9w8/w1958-h1384-no/Flowers%2B-%2BTropical%2BPattern.jpg",
+		"name": "Tropical Pattern",
+		"artist": "Unknown",
+		"genre": "Flowers",
+		"uid": "unknown-tropical-pattern"
+	},{
+		"url": "https://lh5.googleusercontent.com/-fRv8SNm0PRI/VSbyIoqRONI/AAAAAAAAFgw/kTGkqinkUUY/w2130-h1378-no/Flowers%2B-%2BTunnel%2Bof%2BRoses.jpg",
+		"name": "Tunnel of Roses",
+		"artist": "Unknown",
+		"genre": "Flowers",
+		"uid": "unknown-tunnel-of-roses"
+	},{
+		"url": "https://lh5.googleusercontent.com/-M-5mMlDhYv8/VSbyJoyBZLI/AAAAAAAAFg4/ExmY0xmCEtk/w1990-h1384-no/Landscape%2B-%2BGalaxy.jpg",
+		"name": "Galaxy",
+		"artist": "Unknown",
+		"genre": "Landscapes",
+		"uid": "unknown-galaxy"
+	},{
+		"url": "https://lh3.googleusercontent.com/-9h0koV90vkc/VSbyKiUiUUI/AAAAAAAAFhI/ZWwmK-iciq0/w2130-h1356-no/Landscape%2B-%2BTrunk%2BBay.jpg",
+		"name": "Trunk Bay",
+		"artist": "Unknown",
+		"genre": "Landscapes",
+		"uid": "unknown-trunk-bay"
+	},{
+		"url": "https://lh5.googleusercontent.com/-J7HiWYXCPQQ/VSbyKNMMRmI/AAAAAAAAFhA/jBX4yNPlMQA/w2074-h1384-no/Landscape%2B-%2BSunset.jpg",
+		"name": "Sunset",
+		"artist": "Unknown",
+		"genre": "Landscapes",
+		"uid": "unknown-sunset"
+	},{
+		"url": "https://lh3.googleusercontent.com/-hnEkjYnEK5U/VSbyF02lMwI/AAAAAAAAFgQ/s1XGjMcVmRU/w1846-h1384-no/Claude%2BMonet%2B-%2BThe%2BBridge%2Bat%2BArgenteuil.jpg",
+		"name": "The Bridge at Argenteuil",
+		"artist": "Claude Monet",
+		"genre": "Impressionism",
+		"uid": "monet-argenteuil"
+	},{
+		"url": "https://lh6.googleusercontent.com/-_IOTHpa0IKs/VSbyGxm0GyI/AAAAAAAAFgc/5vPWaJ1jrVU/w1720-h1384-no/Claude%2BMonet%2B-%2BThe%2BJapanese%2BFootbridge.jpg",
+		"name": "The Japanese Footbridge",
+		"artist": "Claude Monet",
+		"genre": "Impressionism",
+		"uid": "monet-japanese-footbridge"
+	},{
+		"url": "https://lh6.googleusercontent.com/-CmD63JaPsyU/VSbyFbQ9IsI/AAAAAAAAFgM/NHqoIg6C6ms/w1924-h1384-no/Claude%2BMonet%2B-%2BBanks%2Bof%2Bthe%2BSeine.jpg",
+		"name": "Banks of the Seine",
+		"artist": "Claude Monet",
+		"genre": "Impressionism",
+		"uid": "monet-seine"
+	},{
+		"url": "https://lh3.googleusercontent.com/-hkyE6lIaIgs/VSbyNgdb8pI/AAAAAAAAFiE/xc7Vdbm3WFQ/w2130-h1198-no/Michael%2BLewey%2B-%2BChair%2BAbstract.jpg",
+		"name": "Chair Abstract",
+		"artist": "Michael Lewy",
+		"genre": "Modern",
+		"uid": "lewy-chair-abstract"
+	},{
+		"url": "https://lh3.googleusercontent.com/-BOaSICksa9o/VSbyN19yLSI/AAAAAAAAFiM/4D86clyHqUc/w2130-h1198-no/Michael%2BLewey%2B-%2BChair%2BCube.jpg",
+		"name": "Chair Cube",
+		"artist": "Michael Lewy",
+		"genre": "Modern",
+		"uid": "lewy-chair-cube"
+	},{
+		"url": "https://lh3.googleusercontent.com/-uYRHXf1F1A0/VSbyOQo-t-I/AAAAAAAAFiU/eJINpI4qfK4/w2130-h1198-no/Michael%2BLewey%2B-%2BChairpole.jpg",
+		"name": "Chairpole",
+		"artist": "Michael Lewy",
+		"genre": "Modern",
+		"uid": "lewy-chairpole"
+	},{
+		"url": "https://lh3.googleusercontent.com/-sw2XjOrjLCA/VSbyOmidAEI/AAAAAAAAFic/bWAyEauZEZw/w2130-h1198-no/Michael%2BLewey%2B-%2BOffice%2BOutside.jpg",
+		"name": "Office Outside",
+		"artist": "Michael Lewy",
+		"genre": "Modern",
+		"uid": "lewy-office-outside"
+	},{
+		"url": "https://lh5.googleusercontent.com/-xiH7eRLaPG0/VSbyPL2CnQI/AAAAAAAAFig/bBHo-9E4IbY/w2130-h1198-no/Michael%2BLewey%2B-%2BPhone.jpg",
+		"name": "Phone",
+		"artist": "Michael Lewy",
+		"genre": "Modern",
+		"uid": "lewy-phone"
 	}],
 	"playlists": [{
-		"playlist_name": "Musing",
-		"icon": "http://placekitten.com/200/200",
+		"playlist_name": "Dinner Party",
+		"icon": "icon/dinner_party_icon.png",
 		"contents": [
-			"martin-orchids",
 			"monet-sunrise",
-			"griffith-tranquil"
+			"unknown-trunk-bay",
+			"monet-seine",
+			"unknown-new-york",
+			"unknown-tunnel-of-roses",
+			"unknown-london",
+			"unknown-sunset",
+			"unknown-hong-kong"
 		]
-	}, {
-		"playlist_name": "Adventurous",
-		"icon": "http://placekitten.com/200/200",
+	},{
+		"playlist_name": "Cultured",
+		"icon": "icon/cultured_icon.png",
 		"contents": [
-			"jones-dancers",
-			"vultus-sacre",
-			"martin-orchids"
+			"monet-sunrise",
+			"monet-seine",
+			"unknown-tunnel-of-roses",
+			"monet-argenteuil",
+			"monet-japanese-footbridge"
+		]
+	},{
+		"playlist_name": "Seeking Something Striking",
+		"icon": "icon/striking_icon.png",
+		"contents": [
+			"unknown-clouded-mind",
+			"unknown-colors-bloom",
+			"unknown-galaxy",
+			"unknown-tropical-pattern",
+			"unknown-hong-kong",
+			"unknown-gossip"
+		]
+	},{
+		"playlist_name": "Happy",
+		"icon": "icon/happy_icon.png",
+		"contents": [
+			"unknown-trunk-bay",
+			"unknown-gossip",
+			"unknown-retro",
+			"unknown-london"
 		]
 	}],
 	"artist": [{
-		"name": "Lydia Martin",
-		"cover_piece": "martin-orchids"
+		"name": "Michael Lewy",
+		"cover_piece": "lewy-chair-abstract"
+	},{
+		"name": "Claude Monet",
+		"cover_piece": "monet-argenteuil"
+	},{
+		"name": "Unknown",
+		"cover_piece": "unknown-galaxy"
 	}],
 	"genres": [{
 		"name": "Impressionism",
-		"cover_piece": "griffith-tranquil"
+		"cover_piece": "monet-japanese-footbridge"
+	},{
+		"name": "Modern",
+		"cover_piece": "lewy-chairpole"
+	},{
+		"name": "Abstract",
+		"cover_piece": "unknown-dreams"
+	},{
+		"name": "Landscapes",
+		"cover_piece": "unknown-trunk-bay"
 	}]
 }
