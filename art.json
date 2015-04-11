@@ -158,14 +158,33 @@
 			"unknown-hong-kong"
 		]
 	},{
-		"playlist_name": "Cultured",
+		"playlist_name": "Slideluck",
 		"icon": "icon/cultured_icon.png",
 		"contents": [
-			"monet-sunrise",
-			"monet-seine",
-			"unknown-tunnel-of-roses",
+			"lewy-chair-abstract",
+			"lewy-chair-cube",
+			"lewy-chairpole",
+			"lewy-office-outside",
+			"lewy-phone",
 			"monet-argenteuil",
-			"monet-japanese-footbridge"
+			"monet-japanese-footbridge",
+			"monet-seine",
+			"monet-sunrise",
+			"unknown-cartoon-explosion",
+			"unknown-clouded-mind",
+			"unknown-colors-bloom",
+			"unknown-dreams",
+			"unknown-galaxy",
+			"unknown-gossip",
+			"unknown-hong-kong",
+			"unknown-jungle-monochrome",
+			"unknown-london",
+			"unknown-new-york",
+			"unknown-retro",
+			"unknown-sunset",
+			"unknown-tropical-pattern",
+			"unknown-trunk-bay",
+			"unknown-tunnel-of-roses"
 		]
 	},{
 		"playlist_name": "Seeking Something Striking",
