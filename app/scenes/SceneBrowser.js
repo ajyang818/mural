@@ -9,7 +9,10 @@ SceneSceneBrowser.MODE_GENRE_MENU = 2;
 SceneSceneBrowser.MODE_GENRE_SPECIFIC = 20;
 SceneSceneBrowser.MODE_ARTIST_MENU = 3;
 SceneSceneBrowser.MODE_ARTIST_SPECIFIC = 30;
-SceneSceneBrowser.MODE_DISPLAY_ART = 99;
+SceneSceneBrowser.MODE_PLAYLIST_MENU = 4;
+
+SceneSceneBrowser.MODE_DISPLAY_ART = 90;
+SceneSceneBrowser.MODE_DISPLAY_PLAYLIST = 91;
 
 SceneSceneBrowser.mode = SceneSceneBrowser.MODE_NONE;
 SceneSceneBrowser.styleSelected = null;
@@ -26,6 +29,11 @@ SceneSceneBrowser.loadingDataTimeout;
 SceneSceneBrowser.dataEnded = false;
 
 SceneSceneBrowser.allArtData = null;
+
+SceneSceneBrowser.allTimeouts = [];
+SceneSceneBrowser.playlistIntervalTime = 30000;
+
+SceneSceneBrowser.currentPlaylistName = null;
 
 var ScrollHelper = {
   documentVerticalScrollPosition: function() {
@@ -104,6 +112,7 @@ SceneSceneBrowser.createCellEmpty = function() {
 };
 
 SceneSceneBrowser.loadDataError = function() {
+  alert(".loadDataError called");
   SceneSceneBrowser.loadingDataTry++;
   if (SceneSceneBrowser.loadingDataTry < SceneSceneBrowser.loadingDataTryMax) {
     if (SceneSceneBrowser.loadingDataTry < 10) {
@@ -138,6 +147,8 @@ SceneSceneBrowser.displayArt = function(artURL) {
   // Handles rendering of a chosen piece (from source artURL) in the "#single-piece" div,
   // which is usually hidden but will display above the menu.
 
+  alert(".displayArt called with " + artURL);
+
   // Clear whatever piece may have been previously shown
   $("#single-piece").empty();
   $("#single-piece").css("height", null);
@@ -163,24 +174,52 @@ SceneSceneBrowser.displayArt = function(artURL) {
     if (artRatio > wrapperRatio) {
       $("#single-piece").height("100%");
       $("#display-art").height("100%");
-      alert("ALLEN: height set to 100%");
     } else {
       $("#single-piece").width("100%");
       $("#display-art").width("100%");
-      alert("ALLEN: width set to 100%");
     }
     $("#single-piece-wrapper").show();
   });
 };
 
+SceneSceneBrowser.displayPlaylist = function(playlistName) {
+  // Handles displaying a "playlist", which is really just a setInterval changing which piece
+  // is being displayed with .displayArt() above
+  alert(".displayPlaylist called for " + playlistName);
+  bodyToFilter = SceneSceneBrowser.allArtData.playlists;
+  var artSlugsList = null;
+  for (var ind = 0; ind < bodyToFilter.length; ind++) {
+    if (bodyToFilter[ind].playlist_name == playlistName) {
+      alert("Found playlist name " + playlistName);
+      artSlugsList = bodyToFilter[ind].contents;
+    }
+  }
+
+  var artList = [];
+  $.each(artSlugsList, function(ind, val) {
+    artList.push(SceneSceneBrowser.findURLbyID(val));
+  });
+
+  var ind2 = 1,
+      totalMod = artList.length;
+
+  SceneSceneBrowser.displayArt(artList[ind2]);
+  SceneSceneBrowser.playlistInterval = setInterval(function(){
+    ind2++;
+    alert('Playlist loop! ' + ind2);
+    SceneSceneBrowser.displayArt(artList[(ind2 % totalMod)]);
+  }, SceneSceneBrowser.playlistIntervalTime);
+};
+
 SceneSceneBrowser.hideArt = function() {
   // Hides the art to exit 'full-screen' mode; doesn't do too much right now
   // but potential to move stuff from switchMode or elsewhere to here
+  alert(".hideArt called");
   $("#single-piece-wrapper").hide();
-  alert("ALLEN: .hideArt activated");
 };
 
 SceneSceneBrowser.findURLbyID = function(artID) {
+  alert(".findURLbyID called for " + artID);
   allArt = SceneSceneBrowser.allArtData.art;
   for (var ind = 0; ind < allArt.length; ind++) {
     if (allArt[ind].uid === artID) {
@@ -192,7 +231,7 @@ SceneSceneBrowser.findURLbyID = function(artID) {
 SceneSceneBrowser.filterByCriteria = function(filterKey, filterValue) {
   // Helper function that will look through the entire list of "art" in art.json and pull out entries
   // with filterValue in the filterKey. Good for "filtering" by genre or artist.
-  alert("ALLEN: .filterByCriteria called for key " + filterKey + " and filterValue " + filterValue);
+  alert(".filterByCriteria called for key " + filterKey + " and filterValue " + filterValue);
   bodyToFilter = SceneSceneBrowser.allArtData.art;
   var results = {"art": []};
   for (var ind = 0; ind < bodyToFilter.length; ind++) {
@@ -204,6 +243,7 @@ SceneSceneBrowser.filterByCriteria = function(filterKey, filterValue) {
 };
 
 SceneSceneBrowser.loadDataSuccess = function() {
+  alert(".loadDataSuccess called");
   var response_items;
 
   if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_GENRE_SPECIFIC) {
@@ -220,6 +260,8 @@ SceneSceneBrowser.loadDataSuccess = function() {
     response_items = response.genres.length;
   } else if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_ARTIST_MENU) {
     response_items = response.artist.length;
+  } else if (SceneSceneBrowser.mode === SceneSceneBrowser.MODE_PLAYLIST_MENU) {
+    response_items = response.playlists.length;
   } else {
     response_items = response.art.length;
   }
@@ -259,6 +301,10 @@ SceneSceneBrowser.loadDataSuccess = function() {
         style = response.artist[cursor];
         coverURL = SceneSceneBrowser.findURLbyID(style.cover_piece);
         cell = SceneSceneBrowser.createCell(row_id, t, style.name, coverURL, '', style.name, '', true);
+      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_PLAYLIST_MENU) {
+        style = response.playlists[cursor];
+        coverURL = style.icon;
+        cell = SceneSceneBrowser.createCell(row_id, t, style.playlist_name, coverURL, style.playlist_name, '', '', true);
       }
 
       row.append(cell);
@@ -279,6 +325,7 @@ SceneSceneBrowser.loadDataSuccess = function() {
 };
 
 SceneSceneBrowser.loadDataRequest = function() {
+  alert(".loadDataRequest called");
   if (SceneSceneBrowser.allArtData !== null) {
     SceneSceneBrowser.loadDataSuccess();
   } else {
@@ -318,6 +365,7 @@ SceneSceneBrowser.loadDataRequest = function() {
 };
 
 SceneSceneBrowser.loadData = function() {
+  alert(".loadData called");
   // Even though loading data after end is safe it is pointless and causes lag
   if ((SceneSceneBrowser.itemsCount % SceneSceneBrowser.ColumnsCount !== 0) || SceneSceneBrowser.loadingData) {
     return;
@@ -325,6 +373,8 @@ SceneSceneBrowser.loadData = function() {
 
   if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
     SceneSceneBrowser.displayArt(SceneSceneBrowser.currentPieceURL);
+  } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_PLAYLIST) {
+    SceneSceneBrowser.displayPlaylist(SceneSceneBrowser.currentPlaylistName);
   } else {
     SceneSceneBrowser.loadingData = true;
     SceneSceneBrowser.loadingDataTry = 0;
@@ -356,7 +406,7 @@ SceneSceneBrowser.showInput = function() {
 };
 
 SceneSceneBrowser.switchMode = function(mode) {
-  alert("ALLEN: .switchMode called; previous mode " + SceneSceneBrowser.mode + " and new desired mode is " + mode);
+  alert(".switchMode called; previous mode " + SceneSceneBrowser.mode + " and new desired mode is " + mode);
   if (mode != SceneSceneBrowser.mode) {
     SceneSceneBrowser.mode = mode;
 
@@ -374,11 +424,15 @@ SceneSceneBrowser.switchMode = function(mode) {
     }  else if (mode == SceneSceneBrowser.MODE_ARTIST_MENU) {
       $("#tip_icon_artist").addClass('tip_icon_active');
       SceneSceneBrowser.refresh();
+    } else if (mode == SceneSceneBrowser.MODE_PLAYLIST_MENU) {
+      $("#tip_icon_playlists").addClass('tip_icon_active');
+      SceneSceneBrowser.refresh();
     }
   }
 };
 
 SceneSceneBrowser.clean = function() {
+  alert(".clean called");
   $('#art_table').empty();
   SceneSceneBrowser.itemsCount = 0;
   SceneSceneBrowser.cursorX = 0;
@@ -387,7 +441,7 @@ SceneSceneBrowser.clean = function() {
 };
 
 SceneSceneBrowser.refresh = function() {
-  alert("ALLEN: .refresh was called; mode is currently " + SceneSceneBrowser.mode);
+  alert(".refresh was called; mode is currently " + SceneSceneBrowser.mode);
   SceneSceneBrowser.clean();
   SceneSceneBrowser.loadData();
 };
@@ -486,15 +540,15 @@ SceneSceneBrowser.prototype.handleBlur = function() {
 };
 
 SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
-  alert("SceneSceneBrowser.handleKeyDown(" + keyCode + ")");
-  alert("ALLEN: SceneSceneBrowser.mode is " + SceneSceneBrowser.mode);
+  alert("SceneSceneBrowser.handleKeyDown(" + keyCode + ") SceneSceneBrowser.mode is " + SceneSceneBrowser.mode);
 
-  // When the app is in "display single piece" mode and the user presses any button,
+  // When the app is in "display single piece / playlist" mode and the user presses any button,
   // he should return to the main screen
-  if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART) {
+  if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_ART || SceneSceneBrowser.mode == SceneSceneBrowser.MODE_DISPLAY_PLAYLIST) {
+    clearInterval(SceneSceneBrowser.playlistInterval);
+
     SceneSceneBrowser.hideArt();
     SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ALL);
-    // SceneSceneBrowser.refresh();  // I think .switchMode already does this
     return;
   }
 
@@ -537,17 +591,22 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
         SceneSceneBrowser.styleSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
         SceneSceneBrowser.mode = SceneSceneBrowser.MODE_DISPLAY_ART;
         SceneSceneBrowser.currentPieceURL = $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src');
-        alert("ALLEN: Art URL is " + $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src'));
+        alert("Art URL is " + $('#thumbnail_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('src'));
         SceneSceneBrowser.refresh();
       } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_GENRE_MENU) {
         SceneSceneBrowser.genreSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
         SceneSceneBrowser.mode = SceneSceneBrowser.MODE_GENRE_SPECIFIC;
-        alert("ALLEN: Specific Genre chosen");
+        alert("Specific Genre chosen: " + SceneSceneBrowser.genreSelected);
         SceneSceneBrowser.refresh();
       } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_ARTIST_MENU) {
         SceneSceneBrowser.artistSelected = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-artistname');
         SceneSceneBrowser.mode = SceneSceneBrowser.MODE_ARTIST_SPECIFIC;
-        alert("ALLEN: Specific Artist chosen: " + SceneSceneBrowser.artistSelected);
+        alert("Specific Artist chosen: " + SceneSceneBrowser.artistSelected);
+        SceneSceneBrowser.refresh();
+      } else if (SceneSceneBrowser.mode == SceneSceneBrowser.MODE_PLAYLIST_MENU) {
+        SceneSceneBrowser.currentPlaylistName = $('#cell_' + SceneSceneBrowser.cursorY + '_' + SceneSceneBrowser.cursorX).attr('data-channelname');
+        SceneSceneBrowser.mode = SceneSceneBrowser.MODE_DISPLAY_PLAYLIST;
+        alert("Specific Playlist chosen: " + SceneSceneBrowser.currentPlaylistName);
         SceneSceneBrowser.refresh();
       }
       break;
@@ -561,7 +620,7 @@ SceneSceneBrowser.prototype.handleKeyDown = function(keyCode) {
       sf.service.setVolumeControl(true);
       break;
     case sf.key.RED:
-      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_ALL);
+      SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_PLAYLIST_MENU);
       break;
     case sf.key.GREEN:
       SceneSceneBrowser.switchMode(SceneSceneBrowser.MODE_GENRE_MENU);
