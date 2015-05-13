@@ -19,8 +19,7 @@ var cbpBGSlideshow = (function() {
         $slideshow = $('#cbp-bislideshow');
         $items = $slideshow.children('li');
         itemsCount = $items.length;
-        current = 0; // current item´s index
-
+        current = 0; // current item's index
 
         // preload the images
         $slideshow.imagesLoaded(function() {

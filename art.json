@@ -1,5 +1,29 @@
 {
 	"art": [{
+		"url":"img/future-city.jpg",
+		"name":"City of the Future",
+		"artist":"Martin Anderson",
+		"genre":"Skylines",
+		"uid":"future-city"
+	},{
+		"url":"img/bw-tunnel.jpg",
+		"name":"Slender Tunnel",
+		"artist":"Kyle Bortoni",
+		"genre":"Abstract",
+		"uid":"bw-tunnel"
+	},{
+		"url":"img/fractal.jpg",
+		"name":"Scallops & Scales",
+		"artist":"Stephanie Mikos",
+		"genre":"Abstract",
+		"uid":"fractal"
+	},{
+		"url":"img/rainbow-skull.jpg",
+		"name":"Death In Color",
+		"artist":"Unknown",
+		"genre":"Pop",
+		"uid":"rainbow-skull"
+	},{
 		"url": "http://historicphotoimage.com/store/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/M/o/Monet-000098.jpg_4.jpg",
 		"name": "Sunrise",
 		"artist": "Claude Monet",
@@ -119,7 +143,7 @@
 		"artist": "Michael Lewy",
 		"genre": "Modern",
 		"uid": "lewy-chair-abstract"
-	},{
+	},i{
 		"url": "https://lh3.googleusercontent.com/-BOaSICksa9o/VSbyN19yLSI/AAAAAAAAFiM/4D86clyHqUc/w2130-h1198-no/Michael%2BLewey%2B-%2BChair%2BCube.jpg",
 		"name": "Chair Cube",
 		"artist": "Michael Lewy",
